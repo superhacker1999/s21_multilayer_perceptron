@@ -372,30 +372,35 @@ int main()
 
     while (!trainData.isEof()) {
         ++trainingPass;
-        cout << endl << "Pass " << trainingPass;
+        // cout << endl << "Pass " << trainingPass;
 
         // Get new input data and feed it forward:
         if (trainData.getNextInputs(inputVals) != topology[0]) {
             break;
         }
-        showVectorVals(": Inputs:", inputVals);
+        // showVectorVals(": Inputs:", inputVals);
         myNet.feedForward(inputVals);
 
         // Collect the net's actual output results:
         myNet.getResults(resultVals);
-        showVectorVals("Outputs:", resultVals);
+        // showVectorVals("Outputs:", resultVals);
 
         // Train the net what the outputs should have been:
         trainData.getTargetOutputs(targetVals);
-        showVectorVals("Targets:", targetVals);
+        // showVectorVals("Targets:", targetVals);
         assert(targetVals.size() == topology.back());
 
         myNet.backProp(targetVals);
 
         // Report how well the training is working, average over recent samples:
-        cout << "Net recent average error: "
-                << myNet.getRecentAverageError() << endl;
+        // cout << "Net recent average error: "
+        //         << myNet.getRecentAverageError() << endl;
     }
-
-    cout << endl << "Done" << endl;
+    // cout << endl << "Done" << endl;
+    
+    std::vector<double> input(2);
+    std::cin >> input[0] >> input[1];
+    myNet.feedForward(input);
+    myNet.getResults(input);
+    std::cout<< "Результат: " << input[0];
 }
