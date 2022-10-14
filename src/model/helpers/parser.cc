@@ -2,7 +2,7 @@
 // Created by Rebbecca Gormond aka Mikhail Kukhtachev on 10/4/22.
 //
 
-#include "Parser.h"
+#include "parser.h"
 
 namespace s21 {
 

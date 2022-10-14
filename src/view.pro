@@ -9,10 +9,12 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    view/main.cc \
+    main.cc \
+    view/painter.cc \
     view/view.cc
 
 HEADERS += \
+    view/painter.h \
     view/view.h
 
 FORMS += \
