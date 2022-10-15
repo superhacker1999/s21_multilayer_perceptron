@@ -3,6 +3,9 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsSceneMouseEvent>
+#include <QColor>
+//#include <QPaintEvent>
+//#include <QPainter>
 
 
 class Painter : public QGraphicsScene
@@ -17,6 +20,7 @@ private:
 private:
     void mousePressEvent(QGraphicsSceneMouseEvent * event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void draw(int alpha, int size, QPointF now);
 };
 
 #endif // PAINTER_H
