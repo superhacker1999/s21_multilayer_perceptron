@@ -10,6 +10,7 @@
 #include <cmath>
 #include <fstream>
 #include <sstream>
+#include "Parser/parser.h"
 
 using namespace std;
 
@@ -30,26 +31,29 @@ public:
 
 private:
     ifstream m_trainingDataFile;
+    s21::Parser parse;
 };
 
 void TrainingData::getTopology(vector<unsigned> &topology) {
-    string line;
-    string label;
+    // string line;
+    // string label;
 
-    getline(m_trainingDataFile, line);
-    stringstream ss(line);
-    ss >> label;
-    if (this->isEof() || label.compare("topology:") != 0) {
-        abort();
-    }
+    // getline(m_trainingDataFile, line);
+    // stringstream ss(line);
+    // ss >> label;
+    // if (this->isEof() || label.compare("topology:") != 0) {
+    //     abort();
+    // }
 
-    while (!ss.eof()) {
-        unsigned n;
-        ss >> n;
-        topology.push_back(n);
-    }
-
-    return;
+    // while (!ss.eof()) {
+    //     unsigned n;
+    //     ss >> n;
+    //     topology.push_back(n);
+    // }
+    
+    topology.push_back(784);
+    topology.push_back(379);
+    topology.push_back(26);
 }
 
 TrainingData::TrainingData(const string filename)
@@ -127,7 +131,8 @@ private:
     static double alpha; // [0.0..n] multiplier of last weight change (momentum)
     static double transferFunction(double x);
     static double transferFunctionDerivative(double x);
-    static double randomWeight(void) { return rand() / double(RAND_MAX); }
+    // static double randomWeight(void) { return rand() / double(RAND_MAX); }
+    static double randomWeight(void) { return 0; }
     double sumDOW(const Layer &nextLayer) const;
     double m_outputVal;
     vector<Connection> m_outputWeights;
@@ -359,48 +364,67 @@ void showVectorVals(string label, vector<double> &v)
 
 int main()
 {
-    TrainingData trainData("data.txt");
-
+    // TrainingData trainData("data.txt");
+    s21::Parser parser;
     // e.g., { 3, 2, 1 }
-    vector<unsigned> topology;
-    trainData.getTopology(topology);
+    // vector<unsigned> topology;
+    // trainData.getTopology(topology);
 
-    Net myNet(topology);
+    Net myNet({784, 100, 100, 26});
+
 
     vector<double> inputVals, targetVals, resultVals;
     int trainingPass = 0;
-
-    while (!trainData.isEof()) {
-        ++trainingPass;
-        // cout << endl << "Pass " << trainingPass;
-
-        // Get new input data and feed it forward:
-        if (trainData.getNextInputs(inputVals) != topology[0]) {
-            break;
-        }
-        // showVectorVals(": Inputs:", inputVals);
-        myNet.feedForward(inputVals);
-
-        // Collect the net's actual output results:
-        myNet.getResults(resultVals);
-        // showVectorVals("Outputs:", resultVals);
-
-        // Train the net what the outputs should have been:
-        trainData.getTargetOutputs(targetVals);
-        // showVectorVals("Targets:", targetVals);
-        assert(targetVals.size() == topology.back());
-
-        myNet.backProp(targetVals);
-
-        // Report how well the training is working, average over recent samples:
-        // cout << "Net recent average error: "
-        //         << myNet.getRecentAverageError() << endl;
-    }
-    // cout << endl << "Done" << endl;
     
-    std::vector<double> input(2);
-    std::cin >> input[0] >> input[1];
-    myNet.feedForward(input);
-    myNet.getResults(input);
-    std::cout<< "Результат: " << input[0];
+    s21::Parser::Dataset data = parser.Parsing("emnist-letters-train.csv");
+    auto it = data.begin();
+    int i = 0;
+    // while (it != data.end()) {
+    while (i < 10000) {
+      ++trainingPass;
+      cout << endl << "Pass " << trainingPass;
+      targetVals = parser.getTargetOutputs(*it);
+      inputVals = parser.getInputVals(*it);
+      showVectorVals(": Inputs:", inputVals);
+      myNet.feedForward(inputVals); // input vals
+      myNet.getResults(resultVals);
+      showVectorVals("Outputs:", resultVals);
+      showVectorVals("Targets:", targetVals);
+      myNet.backProp(targetVals);
+      cout << "Net recent average error: "
+                << myNet.getRecentAverageError() << endl;
+      ++it;
+      i++;
+    }
+    cout << endl << "Done" << endl;
+
+    // while (!trainData.isEof()) {
+    //     ++trainingPass;
+    //     // cout << endl << "Pass " << trainingPass;
+
+    //     // Get new input data and feed it forward:
+    //     if (trainData.getNextInputs(inputVals) != topology[0]) {
+    //         break;
+    //     }
+    //     // showVectorVals(": Inputs:", inputVals);
+        // myNet.feedForward(inputVals);
+
+    //     // Collect the net's actual output results:
+        // myNet.getResults(resultVals);
+    //     // showVectorVals("Outputs:", resultVals);
+
+    //     // Train the net what the outputs should have been:
+    //     trainData.getTargetOutputs(targetVals);
+    //     // showVectorVals("Targets:", targetVals);
+    //     assert(targetVals.size() == topology.back());
+
+    //     myNet.backProp(targetVals);
+
+    //     // Report how well the training is working, average over recent samples:
+    //     // cout << "Net recent average error: "
+    //     //         << myNet.getRecentAverageError() << endl;
+    // }
+    // cout << endl << "Done" << endl;
+
+
 }

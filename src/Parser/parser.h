@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 
+constexpr double kKoeff = 0.003921568;
 
 namespace s21 {
 
@@ -17,19 +18,23 @@ class Parser {
   private:
     bool error_;
     int string_size_ = 0;
+    
 
     std::vector<int> StringParsing_ (std::string line);
 
-public:
+  public:
+    using Dataset = std::vector<std::vector<int>>;
     Parser() : error_(false) {}
     ~Parser() {}
 
     int count_string = 0;
-//    int count_elemets_char = 0;
 
-    void Parsing(const std::string &file_name);
+    Dataset Parsing(const std::string &file_name);
     void Print();
-    std::vector<std::vector<int>> data_set_;
+    std::vector<double> getTargetOutputs(const std::vector<int>& data_line);
+    std::vector<double> getInputVals(const std::vector<int>& data_line);
+
+    Dataset data_set_;
 
     [[nodiscard]] bool get_error() const { return error_; };
 };
