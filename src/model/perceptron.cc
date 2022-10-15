@@ -9,7 +9,7 @@ using namespace s21;
 //  инициализация нейронной сети рандомными весами
 //  расстановка размеров
 //  остальное происходит в классе нейрона
-Perceptron::Perceptron(vector<short> &topology) {
+Perceptron::Perceptron(vector<int> &topology) {
   for (size_t layer_num = 0; layer_num < topology.size(); layer_num++) {
     layer_.push_back(Layer());
     for (size_t neuron_num = 0; neuron_num < topology[layer_num]; neuron_num++) {
@@ -52,7 +52,13 @@ void Perceptron::BackPropagation(const vector<double> &right_value) {
   error_ /= 2;
 
   //  считаем локальный градиент
+  for (size_t neuron = 0; neuron < output_layer.size(); neuron++)
+    output_layer[neuron].CalcLocalGradient(right_value[neuron]);
 
+  //  градиент скрытых слоев
+  for (size_t layer_num = layer_.size() - 2; layer_num > 0; layer_num--) {
+
+  }
 }
 
 //  получение значений нейронов на последнем слое

@@ -36,7 +36,7 @@ class Neuron {
 
   void FeedForward();
   void ConnectionNeuron(std::vector<Neuron> &previous_layer);
-
+  void CalcLocalGradient(double right_value);
 
 
 };

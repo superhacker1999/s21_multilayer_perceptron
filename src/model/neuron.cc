@@ -36,6 +36,12 @@ double Neuron::RandomWeightGenerate_() {
   return static_cast<double>(dist(engine))/1000;
 }
 
+//  локальная ошибка конкретно у этого нейрона
+void Neuron::CalcLocalGradient(double right_value) {
+  double delta = right_value - value_;
+  error_ = delta * ActivationNeuron_(value_);
+}
+
 double Neuron::GetValue() {
   return this->value_;
 }

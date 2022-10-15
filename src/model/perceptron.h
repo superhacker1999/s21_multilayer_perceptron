@@ -7,8 +7,9 @@
 
 #include <vector>
 #include <stdexcept>
-//  #include "Neuron.h"
-//  typedef vector<Neuron> Layer;
+
+#include "neuron.h"
+typedef vector<Neuron> Layer;
 
 using std::vector;
 
@@ -16,7 +17,7 @@ namespace s21 {
 
 class Perceptron {
  public:
-  Perceptron(vector<short> &topology);
+  Perceptron(vector<int> &topology);
   double GetResult(int index_neuron);
   double GetError();
   void BackPropagation(const vector<double> &right_value);
