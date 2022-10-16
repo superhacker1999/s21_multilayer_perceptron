@@ -81,7 +81,8 @@ void Perceptron::BackPropagation(const int& answer_pos) {
     for (size_t j = 0; j < layer_[i].size(); ++j) {
       Neuron neuron = layer_[i][j];
       double num1 = errors[j];
-      double num2 = Neuron::ActivationDerivativeNeuron_(neuron.GetValue());
+      double num = neuron.GetValue();
+      double num2 = Neuron::ActivationDerivativeNeuron_(num);
       double delta = num1 * num2;
       neuron.SetDelta(delta);
     }
@@ -103,6 +104,9 @@ void Perceptron::UpdateWeight(const vector<double> &input_value) {
         double num1 = neuron.GetDelta();
         double num2 = inputVals[j];
         double num_mul = kALPHA * num1 * num2;
+        if (num_mul != 0.0) {
+          std::cout<<"smth";
+        }
         neuron.GetWeight(j) -= num_mul;
       }
     }
