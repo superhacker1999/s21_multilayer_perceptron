@@ -6,7 +6,7 @@
 
 namespace s21 {
 
-void Parser::Parsing(const std::string &file_name) {
+s21::Parser::Dataset Parser::Parsing(const std::string &file_name) {
     std::string line;
     std::ifstream file(file_name);
     error_ = false;
@@ -20,6 +20,7 @@ void Parser::Parsing(const std::string &file_name) {
     } else {
         error_ = true;
     }
+    return data_set_;
 }
 
 std::vector<int> Parser::StringParsing_(std::string line) {
@@ -39,8 +40,8 @@ std::vector<int> Parser::StringParsing_(std::string line) {
 }
 
 void Parser::Print() {  // delete late
-    for(auto i = 0; i < data_set_.size(); i++) {
-        for(int j = 0; j < data_set_[i].size(); j++)
+    for(size_t i = 0; i < data_set_.size(); i++) {
+        for(size_t j = 0; j < data_set_[i].size(); j++)
             std::cout << data_set_[i][j] << ' ';
         std::cout << std::endl;
     }

@@ -7,11 +7,12 @@
 
 #include <vector>
 #include <stdexcept>
+#include <cassert>
 
 #include "neuron.h"
-typedef vector<Neuron> Layer;
 
 using std::vector;
+typedef vector<s21::Neuron> Layer;
 
 namespace s21 {
 
@@ -20,14 +21,16 @@ class Perceptron {
   Perceptron(vector<int> &topology);
   double GetResult(int index_neuron);
   double GetError();
-  void BackPropagation(const vector<double> &right_value);
-  void FeedForward(vector<double> &input_value);
+  void BackPropagation(const int& answer_pos);
+  void FeedForward(const vector<double> &input_value);
+  void UpdateWeight(const vector<double> &input_value);
+  void LearnProgressOutput(const std::vector<double>& expected);
 
  private:
-  size_t amount_of_hidden_layers_ = 2;
+  int amount_of_hidden_layers_ = 2;
   double error_;
   double average_error_;
-  const double step_ = 0.01;
+  const double kALPHA = 0.25;
   vector<Layer> layer_;
 
   //  возможна реализация с одним вектором, где лежать все слои
