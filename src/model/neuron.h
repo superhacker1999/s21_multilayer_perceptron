@@ -23,6 +23,28 @@ namespace s21 {
 class Neuron {
  public:
   Neuron(std::vector<int> topology, size_t layer_index, size_t index_in_layer);
+  Neuron(const Neuron& other) {
+    my_index_ = other.my_index_;
+    value_ = other.value_;
+    delta_ = other.delta_;
+    previous_layer_ = other.previous_layer_;
+    next_layer_ = other.next_layer_;
+    weight_ = other.weight_;
+  }
+  Neuron(Neuron&& other) {
+    my_index_ = other.my_index_;
+    value_ = other.value_;
+    delta_ = other.delta_;
+    previous_layer_ = other.previous_layer_;
+    next_layer_ = other.next_layer_;
+    weight_ = other.weight_;
+    other.previous_layer_ = nullptr;
+    other.next_layer_ = nullptr;
+  }
+  void operator=(const Neuron&) {
+
+  }
+  ~Neuron() {;}
 
   int GetMyIndex();
   double& GetWeight(size_t index);
@@ -30,20 +52,18 @@ class Neuron {
   double GetError();
   void setValue(double value);
 
- private:
+ public:
   int my_index_ = 0;
-  double value_ = 0;
-  double delta_ = 0;
+  double value_ = 0.0;
+  double delta_ = 0.0;
+  std::vector<Neuron>* previous_layer_ = nullptr;
+  std::vector<Neuron>* next_layer_;
+  std::vector<double> weight_;
 
 public:
   double ActivationNeuron_(double summ_neuron_charges);
   static double ActivationDerivativeNeuron_(double value);
   double RandomWeightGenerate_();
-
- private:
-  std::vector<Neuron>* previous_layer_;
-  std::vector<Neuron>* next_layer_;
-  std::vector<double> weight_;
 
   public:
     void FeedForward();

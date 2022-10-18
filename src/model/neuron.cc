@@ -9,15 +9,22 @@ Neuron::Neuron(std::vector<int> topology, size_t layer_index, size_t index_in_la
   // if(layer_index != 0) previous_layer_->reserve(topology[layer_index - 1]);
   // if(layer_index != topology.size() - 1) next_layer_->reserve(topology[layer_index + 1]);
   weight_.reserve(topology[layer_index]);
-  for(int i = 0; i < topology[layer_index]; i++)
-    weight_.push_back(RandomWeightGenerate_());
+  for(int i = 0; i < topology[layer_index]; i++) {
+    // double weight = RandomWeightGenerate_();
+    double weight = 0.1;
+    weight_.push_back(weight);
+    std::cout<<"weight: " << weight << std::endl;
+  }
 }
 
 void Neuron::FeedForward() {
   double accumulate_charge = 0;
-  for(size_t i = 0; i < previous_layer_->size(); i++)
-    accumulate_charge += previous_layer_->at(i).weight_[my_index_] * previous_layer_->at(i).value_;
-  this->value_ = ActivationNeuron_(accumulate_charge);
+  if (previous_layer_) {
+    for(size_t i = 0; i < previous_layer_->size(); i++)
+      accumulate_charge += (*previous_layer_)[i].weight_.at(my_index_) * (*previous_layer_).at(i).value_;  
+    this->value_ = accumulate_charge;
+  }
+  // this->value_ = ActivationNeuron_(accumulate_charge);
 }
 
 void Neuron::ConnectionNeuron(std::vector<Neuron> *previous_layer) {
@@ -25,8 +32,7 @@ void Neuron::ConnectionNeuron(std::vector<Neuron> *previous_layer) {
 }
 
 double Neuron::ActivationNeuron_(double summ_neuron_charges) {
-  // return 1 / 1 + exp((-1) * summ_neuron_charges);
-  return 1.0 / (1.0 + exp(-summ_neuron_charges));
+  return 1 / 1 + exp((-1) * summ_neuron_charges);
 }
 
 double Neuron::ActivationDerivativeNeuron_(double value) {

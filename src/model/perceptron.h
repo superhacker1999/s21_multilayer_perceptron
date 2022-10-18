@@ -30,8 +30,8 @@ class Perceptron {
   int amount_of_hidden_layers_ = 2;
   double error_;
   double average_error_;
-  const double kALPHA = 0.25;
-  vector<Layer> layer_;
+  const double kALPHA = 0.1f;
+  vector<Layer> layers_;
 
   //  возможна реализация с одним вектором, где лежать все слои
 //  Layer in_layer_;
