@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <random>
+#include <cmath>
 
 namespace s21 {
   class Neuron;
@@ -22,12 +23,13 @@ class Neuron {
     ~Neuron() {
       ;
     }
-    void SetValue(const double& value) { m_value_ = value; }
-    double GetValue() { return m_value_; }
+    void SetValue(const double& value) { m_value_ = ActivationNeuron_(value); }
+    double GetValue() const { return m_value_; }
     std::vector<double>& GetWeight() { return m_weight_; }
-  
+
   private:
     double RandomWeightGenerate_();
+    double ActivationNeuron_(double);
 };
 }  // namespace s21
 

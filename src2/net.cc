@@ -45,9 +45,6 @@ void s21::Net::BackProp(const size_t& answer_pos) {
 
 
 
-
-
-
 void s21::Net::LearnProgressOutput(const std::vector<double>& expected) {
   double err_koef = 0.0;
   for (size_t i = 0; i < m_layers_.back().size(); ++i)
