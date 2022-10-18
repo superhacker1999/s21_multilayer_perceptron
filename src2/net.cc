@@ -18,9 +18,9 @@ s21::Net::~Net() {
 void s21::Net::FeedForward(const std::vector<double>& input_vals) {
   assert(input_vals.size() == m_layers_[0].size());
 
-  // setting input values to the 1st layer
+  // setting input values to the input layer
   for (size_t i = 0; i < input_vals.size(); ++i)
-    m_layers_[0][i]->SetValue(input_vals[i]);
+    m_layers_[0][i]->SetValue(input_vals[i] / kKoeff);
 
   for (size_t layer_num = 1; layer_num < m_layers_.size(); ++layer_num)
     for (size_t neuron_num = 0; neuron_num < m_layers_[layer_num].size(); ++neuron_num)
@@ -34,22 +34,72 @@ double s21::Net::GetNewValue(size_t layer_num, size_t neuron_num) {
     double prev_value = m_layers_[layer_num - 1][i]->GetValue();
     new_value += prev_weight * prev_value;
   }
-  return new_value;
+  return Activation(new_value);
+}
+
+double s21::Net::Activation(double x) {
+  return 1.0 / (1.0 + exp(-x));
+  // return tanh(x);
+}
+
+double s21::Net::ActivationDerivative(double x) {
+  return x * (1 - x);
+  // return atanh(x);
 }
 
 void s21::Net::BackProp(const size_t& answer_pos) {
   std::vector<double> answer(m_layers_.back().size(), 0.0);
   answer[answer_pos - 1] = 1.0;
-  
+  for (size_t i = m_layers_.size() - 1; (int)i >= 0; --i) {
+    std::vector<double> errors;
+    if (i != m_layers_.size() - 1) {
+      for (size_t j = 0; j < m_layers_[i].size(); ++j) {
+        double error = 0.0;
+        for (Neuron *n : m_layers_[i + 1]) {
+          error += n->GetWeight()[j] * n->GetDelta();
+        }
+        errors.push_back(error);
+      }
+    } else {
+      for (size_t j = 0; j < m_layers_[i].size(); ++j) {
+        Neuron* n = m_layers_[i][j];
+        errors.push_back(answer[j] - n->GetValue());
+      }
+    }
+    for(size_t j = 0; j < m_layers_[i].size(); ++j) {
+      Neuron* n = m_layers_[i][j];
+      n->SetDelta(errors[j] * ActivationDerivative(n->GetValue()));
+    }
+  }
 }
 
+void s21::Net::UpdateWeights(const std::vector<double>& input_vals) {
+  std::vector<double> tmp_input = input_vals;
+  for (size_t i = 0; i < m_layers_.size(); ++i) {
+    if (i != 0) {
+      for (Neuron* n : m_layers_[i - 1])
+        tmp_input.push_back(n->GetValue());
+    }
+    for (Neuron* n : m_layers_[i]) {
+      for (size_t j = 0; j < tmp_input.size(); ++j) {
+        n->GetWeight()[j] += kALPHA * n->GetDelta() * tmp_input[j];
+      }
+      // n->GetWeight().back() += kALPHA * n->GetDelta();
+    }
+    tmp_input.clear();
+  }
+}
 
-
-void s21::Net::LearnProgressOutput(const std::vector<double>& expected) {
-  double err_koef = 0.0;
+double s21::Net::GetOutputError_(const std::vector<double>& expected) {
+  double output_err = 0.0;
   for (size_t i = 0; i < m_layers_.back().size(); ++i)
-    err_koef += pow(expected[i] - (*m_layers_.back()[i]).GetValue(), 2);
-  err_koef /= 200;
+    output_err += pow(expected[i] - m_layers_.back()[i]->GetValue(), 2);
+  return output_err * 0.5f;
+}
+
+// tmp method
+void s21::Net::LearnProgressOutput(const std::vector<double>& expected) {
+  double err_koef = GetOutputError_(expected) / 100;
 
   std::cout<<"Output:\n";
   for (size_t i = 0; i < m_layers_.back().size(); ++i)

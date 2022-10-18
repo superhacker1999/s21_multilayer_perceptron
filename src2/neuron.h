@@ -23,13 +23,14 @@ class Neuron {
     ~Neuron() {
       ;
     }
-    void SetValue(const double& value) { m_value_ = ActivationNeuron_(value); }
+    void SetValue(const double& value) { m_value_ = value; }
     double GetValue() const { return m_value_; }
     std::vector<double>& GetWeight() { return m_weight_; }
+    double GetDelta() { return m_delta_; }
+    void SetDelta(double delta) { m_delta_ = delta; }
 
-  private:
-    double RandomWeightGenerate_();
-    double ActivationNeuron_(double);
+  public:
+    static double RandomWeightGenerate_(int x = 1000);
 };
 }  // namespace s21
 

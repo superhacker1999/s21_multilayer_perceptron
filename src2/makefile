@@ -1,13 +1,16 @@
-SRC=net.cc neuron.cc test.cc
+SRC=net.cc neuron.cc test.cc parser.cc
 DEBUG_FLAG=-g
 CC=gcc
 FLAGS=-Wall -Werror -Wextra -lstdc++ -std=c++17
 
-build:
+build: clean
 	  $(CC) $(FLAGS) $(SRC)
 
 test: build
-	./a.out
+	./a.out > output.txt
 
-debug:
+debug: clean
 	$(CC) $(FLAGS) $(SRC) $(DEBUG_FLAG)
+
+clean:
+	rm -rf a.out*
