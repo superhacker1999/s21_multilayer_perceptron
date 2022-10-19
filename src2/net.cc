@@ -29,30 +29,31 @@ void s21::Net::FeedForward(const std::vector<double>& input_vals) {
 
 double s21::Net::GetNewValue(size_t layer_num, size_t neuron_num) {
   double new_value = 0.0;
-  for (size_t i = 0; i < m_layers_[layer_num - 1].size(); ++i) {
+  size_t i = 0;
+  // till i < mlayer[layernum - 1].size()
+  for (; i < m_layers_[layer_num - 1].size(); ++i) {
     double prev_weight = m_layers_[layer_num - 1][i]->GetWeight()[neuron_num];
     double prev_value = m_layers_[layer_num - 1][i]->GetValue();
     new_value += prev_weight * prev_value;
   }
-  return Activation(new_value);
+  // without this
+  double bias = m_layers_[layer_num - 1][i - 1]->GetWeight().back();
+  new_value += bias;
+  new_value = Activation(new_value);
+  return new_value;
 }
 
 double s21::Net::Activation(double x) {
-  // return 1.0 / (1.0 + exp(-x));
-  // return tanh(x);
-  return (exp(2*x)-1)/(exp(2*x)+1);
+ return (2.0 / (1.0 + exp(-2.0 * x))) - 1.0;
 }
 
 double s21::Net::ActivationDerivative(double x) {
-  // return x * (1 - x);
-  // return atanh(x);
-  // return exp(-x)/((1 + exp(-x))*(1 + exp(-x)));
-  return (exp(2*x)+1)/(exp(2*x)-1);
+  return -(log10(-(x / (1.0 + x)) + (1.0 + (1.0 + x)))/ 2.0);
 }
 
 void s21::Net::BackProp(const size_t& answer_pos) {
   std::vector<double> answer(m_layers_.back().size(), 0.0);
-  answer[answer_pos - 1] = 0.0;
+  answer[answer_pos - 1] = 1.0;
   for (size_t i = m_layers_.size() - 1; (int)i >= 0; --i) {
     std::vector<double> errors;
     if (i != m_layers_.size() - 1) {
@@ -77,7 +78,7 @@ void s21::Net::BackProp(const size_t& answer_pos) {
       Neuron* n = m_layers_[i][j];
       double error = errors[j];
       double deriv = ActivationDerivative(n->GetValue());
-      n->SetDelta(errors[j] * ActivationDerivative(n->GetValue()));
+      n->SetDelta(error * deriv);
     }
   }
 }

@@ -5,7 +5,7 @@ s21::Neuron::Neuron(const std::vector<short>& topology,
   m_index_ = index_in_layer;
   // topology[layer_index] + 1 cuz we need 1 more neuron - bias
   for (short i = 0; i < topology[layer_index] + 1; ++i)
-    m_weight_.push_back(RandomWeightGenerate_());
+    m_weight_.push_back(0.1);
   m_weight_.shrink_to_fit();
 }
 

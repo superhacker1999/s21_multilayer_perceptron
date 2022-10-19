@@ -16,7 +16,7 @@ class Net {
     double m_average_error_;
     // коэфициент скорости обучения
     // может варьироваться
-    const double kALPHA = 1.0f;
+    const double kALPHA = 0.1f;
     // коэфициент для нормализации входящих значений
     // стандартно для нашей задачи равен 255.0
     const double kKoeff = 1.0f;

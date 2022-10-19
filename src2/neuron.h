@@ -14,8 +14,8 @@ namespace s21 {
 class Neuron {
   private:
     size_t m_index_;
-    double m_value_;
-    double m_delta_;
+    double m_value_ = 0.0;
+    double m_delta_ = 0.0;
     std::vector<double> m_weight_;
 
   public:
