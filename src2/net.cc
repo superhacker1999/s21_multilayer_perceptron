@@ -38,14 +38,16 @@ double s21::Net::GetNewValue(size_t layer_num, size_t neuron_num) {
 }
 
 double s21::Net::Activation(double x) {
-  return 1.0 / (1.0 + exp(-x));
+  // return 1.0 / (1.0 + exp(-x));
   // return tanh(x);
+  return (exp(2*x)-1)/(exp(2*x)+1);
 }
 
 double s21::Net::ActivationDerivative(double x) {
-  return x * (1 - x);
+  // return x * (1 - x);
   // return atanh(x);
   // return exp(-x)/((1 + exp(-x))*(1 + exp(-x)));
+  return (exp(2*x)+1)/(exp(2*x)-1);
 }
 
 void s21::Net::BackProp(const size_t& answer_pos) {
