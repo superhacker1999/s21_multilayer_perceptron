@@ -1,7 +1,7 @@
 SRC=net.cc neuron.cc test.cc parser.cc
 DEBUG_FLAG=-g
 CC=gcc
-FLAGS=-Wall -Werror -Wextra -lstdc++ -std=c++17
+FLAGS=-Wall -Wextra -lstdc++ -std=c++17
 
 build: clean
 	  $(CC) $(FLAGS) $(SRC)

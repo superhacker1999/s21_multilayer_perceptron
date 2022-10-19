@@ -25,7 +25,7 @@ int main() {
     answer[0] = data[index][0] == 0 ? 0.0 : 1.0;
     net.FeedForward(input);
     net.BackProp(data[index][0] + 1);
-    net.UpdateWeights(answer);
+    net.UpdateWeights(input);
     net.LearnProgressOutput(answer);
     ++i;
   }

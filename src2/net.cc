@@ -45,29 +45,36 @@ double s21::Net::Activation(double x) {
 double s21::Net::ActivationDerivative(double x) {
   return x * (1 - x);
   // return atanh(x);
+  // return exp(-x)/((1 + exp(-x))*(1 + exp(-x)));
 }
 
 void s21::Net::BackProp(const size_t& answer_pos) {
   std::vector<double> answer(m_layers_.back().size(), 0.0);
-  answer[answer_pos - 1] = 1.0;
+  answer[answer_pos - 1] = 0.0;
   for (size_t i = m_layers_.size() - 1; (int)i >= 0; --i) {
     std::vector<double> errors;
     if (i != m_layers_.size() - 1) {
       for (size_t j = 0; j < m_layers_[i].size(); ++j) {
         double error = 0.0;
         for (Neuron *n : m_layers_[i + 1]) {
-          error += n->GetWeight()[j] * n->GetDelta();
+          double weight = n->GetWeight()[j];
+          double delta = n->GetDelta();
+          error += weight * delta;
         }
         errors.push_back(error);
       }
     } else {
       for (size_t j = 0; j < m_layers_[i].size(); ++j) {
         Neuron* n = m_layers_[i][j];
-        errors.push_back(answer[j] - n->GetValue());
+        double answer_elem = answer[j];
+        double value = n->GetValue();
+        errors.push_back(answer_elem - value);
       }
     }
     for(size_t j = 0; j < m_layers_[i].size(); ++j) {
       Neuron* n = m_layers_[i][j];
+      double error = errors[j];
+      double deriv = ActivationDerivative(n->GetValue());
       n->SetDelta(errors[j] * ActivationDerivative(n->GetValue()));
     }
   }
@@ -82,9 +89,13 @@ void s21::Net::UpdateWeights(const std::vector<double>& input_vals) {
     }
     for (Neuron* n : m_layers_[i]) {
       for (size_t j = 0; j < tmp_input.size(); ++j) {
-        n->GetWeight()[j] += kALPHA * n->GetDelta() * tmp_input[j];
+        double delta = n->GetDelta();
+        double tmp_input_elem = tmp_input[j];
+        double new_weight = kALPHA * delta * tmp_input_elem;
+        n->GetWeight()[j] += new_weight;
       }
-      // n->GetWeight().back() += kALPHA * n->GetDelta();
+      double delta = n->GetDelta();
+      n->GetWeight().back() += kALPHA * delta;
     }
     tmp_input.clear();
   }
