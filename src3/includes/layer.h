@@ -13,9 +13,8 @@ class Layer {
   
   public:
     Layer(size_t, size_t);
+    ~Layer();
     std::vector<Neuron*>& GetNeurons() { return  m_neurons_; }
-    
-
 };
 }
 

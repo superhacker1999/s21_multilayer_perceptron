@@ -24,10 +24,13 @@ class Network {
       void BackProp(const std::vector<double>& expected_data);
       void UpdateWeights(const std::vector<double>& some_data);
       int Predict(const std::vector<double>& some_data); // returns the index of maximum value int the output array
-      void LearnOutput(const std::vector<double>& input, const std::vector<double>& expected);
+      double LearnOutput(const std::vector<double>& input, const std::vector<double>& expected);
       // void Train(int);
       // void Test();
       // void Validate();
+    
+    private:
+      double GetOutputError_(const std::vector<double>& expected);
 };  
 }
 
