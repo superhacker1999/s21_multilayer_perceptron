@@ -134,7 +134,7 @@ void s21::Network::Test() {
   std::cout << "I'm ready to be tested!\nPlease input index of dataset [0-88800]";
   std::cin >> index;
   while (index != -1) {
-    auto input_data = data_handler.GetThisTrainSet(index++);
+    auto input_data = data_handler.GetThisTrainSet(index);
     std::cout << "\nits gonna be:\n";
     for (auto it = input_data.second.begin(); it != input_data.second.end(); ++it) {
       std::cout << *it << " ";
