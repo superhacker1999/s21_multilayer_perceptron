@@ -1,6 +1,6 @@
 CC=gcc
 SRC:=$(PWD)/code/* $(PWD)/helpers/parser.cc
-CFLAGS:=-Wall -Werror -Wextra -lstdc++ -std=c++17
+CFLAGS:=-Wall -Wextra -lstdc++ -std=c++17
 
 test: clean
 	$(CC) $(CFLAGS) $(SRC)

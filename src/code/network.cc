@@ -98,27 +98,31 @@ int s21::Network::Predict(const std::vector<double>& input_data) {
   return std::distance(outputs.begin(), std::max_element(outputs.begin(), outputs.end()));
 }
 
-double s21::Network::LearnOutput(const std::vector<double>& input, const std::vector<double>& expected) {
+double s21::Network::LearnOutput(const std::vector<double>& expected) {
   double error = GetOutputError_(expected);
 
-  std::cout<<"\n\ninput:\n";
-  for (size_t i = 0; i < input.size(); ++i) {
-    std::cout << input.at(i) << " ";
-  }
-
   std::cout<<"\nexpected output:\n";
-  for(size_t i = 0; i < expected.size(); ++i) {
-    std::cout << expected.at(i) << " ";
-  }
+  std::cout<< std::distance(expected.begin(), std::max_element(expected.begin(), expected.end()));
 
   std::cout<<"\ncurrent output:\n";
   for (size_t i = 0; i < m_layers_.back()->GetNeurons().size(); ++i) {
-    std::cout << m_layers_.back()->GetNeurons().at(i)->GetValue() << " ";
+    printf("%.3f ", m_layers_.back()->GetNeurons().at(i)->GetValue());
   }
 
-  std::cout << "\ncurrent average error:\n" << error;
+  std::cout << "\ncurrent average error:\n" << error << std::endl;
 
   return error;
+  // double error = GetOutputError_(expected);
+
+  // std::cout<<"\nexpected output:\n";
+  // std::cout<< (char)(std::distance(expected.begin(), std::max_element(expected.begin(), expected.end())) + 65);
+
+  // std::cout<<"\ncurrent output:\n";
+  // std::cout<< (char)(std::distance(m_layers_.back()->GetNeurons().begin(), std::max_element(m_layers_.back()->GetNeurons().begin(), m_layers_.back()->GetNeurons().end())) + 65);
+
+  // std::cout << "\ncurrent average error:\n" << error;
+
+  // return error;
 }
 
 double s21::Network::GetOutputError_(const std::vector<double>& expected) {
