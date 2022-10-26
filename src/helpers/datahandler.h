@@ -12,6 +12,7 @@ class DataHandler {
     using train_dataset = std::vector<double>;
     using train_answer = std::vector<double>;
 
+
   DataHandler(const std::string& file_name) {
     data_ = parser_.Parsing(file_name);
   }
