@@ -199,7 +199,7 @@ std::vector<double> s21::Network::LoadWeights() {
     }
     assert(loaded_weights.size() == 41586);
   } else {
-    throw std::length_error("There is no file with weights\nPlease teach `m");
+    throw std::length_error("There is no file with weights\nPlease teach 'em");
   }
   return loaded_weights;
 }

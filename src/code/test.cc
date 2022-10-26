@@ -14,8 +14,9 @@ int main() {
  // 3. кол-во нейронов выходящего слоя
  // 4. alhpa - learning rate
   s21::Network net({50, 30}, 784, 26, 0.1);
-  net.Train(100);
+  // net.Train(100);
   // net.SaveWeights();
   // net.LoadWeights();
+  net.UploadWeightsToNet(net.LoadWeights());
   net.Test();
 }
