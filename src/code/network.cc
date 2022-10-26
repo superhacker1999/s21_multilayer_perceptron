@@ -2,12 +2,13 @@
 
 s21::Network::Network(std::vector<int> spec, size_t input_size,
 size_t num_classes, double learning_rate) : m_learning_rate_(learning_rate) {
-  for (size_t i = 0; i < spec.size(); ++i) {
-    if (i == 0)
+  for (size_t i = 0; i < spec.size(); ++i) {  // кол-во внутренних слоев
+    if (i == 0)  // первый слой создаем размера первого элемента массива spec
       m_layers_.push_back(new Layer(input_size, spec.at(i)));
     else
       m_layers_.push_back(new Layer(m_layers_.at(i - 1)->GetNeurons().size(), spec.at(i)));
   }
+  // добавляем последний слой размера num_classes
   m_layers_.push_back(new Layer(m_layers_.at(m_layers_.size() - 1)->GetNeurons().size(), num_classes));
 }
 

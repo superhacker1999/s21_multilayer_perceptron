@@ -9,8 +9,8 @@
 namespace s21 {
 class Network {
   private:
-    std::vector<Layer*> m_layers_;
-    double m_learning_rate_;
+    std::vector<Layer*> m_layers_;  // кол-во внутренних слоев
+    double m_learning_rate_;  // коэффициент с которым происходит обучение и изменение весов
     double testPerfomance; // ???
 
     public:
