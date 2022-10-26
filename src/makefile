@@ -1,11 +1,14 @@
-data_xor:
-	g++ makeTrainingSamples.cpp
-	./a.out XOR > data.txt
+CC=gcc
+SRC:=$(PWD)/code/* $(PWD)/helpers/parser.cc
+CFLAGS:=-Wall -Werror -Wextra -lstdc++ -std=c++17
 
-data_per:
-	g++ makeTrainingSamples.cpp
-	./a.out perim > data.txt
+test: clean
+	$(CC) $(CFLAGS) $(SRC)
+	./a.out > output.txt
 
-learn:
-	g++ net.cpp
-	./a.out
+debug: clean
+	$(CC) $(CFLAGS) -g $(SRC)
+
+clean:
+	rm -rf output.txt
+	rm -rf a.out*
