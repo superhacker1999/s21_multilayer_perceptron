@@ -131,7 +131,7 @@ void s21::Network::Train(int epochs_count) {
 void s21::Network::Test() {
   s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-train.csv");
   int index = 0;
-  std::cout << "I'm ready to be tested!\n";
+  std::cout << "I'm ready to be tested!\nPlease input index of dataset [0-88800]";
   std::cin >> index;
   while (index != -1) {
     auto input_data = data_handler.GetThisTrainSet(index++);
