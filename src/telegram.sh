@@ -4,6 +4,11 @@ TELEGRAM_USER_ID=352059128
 TIME=60
 
 URL="https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage"
-TEXT="Нейронка обучилась, можно запускать тесты"
+
+if ! [ -n "$2" ] ; then
+  TEXT="$1 `cat text.txt | tail -n1`"
+else
+  TEXT="$1 $2"
+fi
 
 curl -s --max-time $TIME -d "chat_id=$TELEGRAM_USER_ID&disable_web_page_preview=1&text=$TEXT" $URL > /dev/null
