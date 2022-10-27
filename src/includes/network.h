@@ -28,8 +28,8 @@ class Network {
       void UpdateWeights(const std::vector<double>& some_data);
       int Predict(const std::vector<double>& some_data); // returns the index of maximum value in the output array
       double LearnOutput(const std::vector<double>& expected);
-      void Train(int);
-      void SaveWeights();
+      void Train(int, int);
+      void SaveWeights(std::string);
       std::vector<double> LoadWeights(const std::string& weight_path);
       void UploadWeightsToNet(std::vector<double>);
       void Test();

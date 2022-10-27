@@ -5,7 +5,7 @@ CFLAGS:=-Wall -Wextra -lstdc++ -std=c++17
 
 learn: clean
 	$(CC) $(CFLAGS) $(SRC_LEARN)
-	./a.out $(settings) > text.txt
+	./a.out $(alpha) $(percent) $(epochs) > text.txt
 	bash telegram.sh "Neuron net has trained."
 	rm -rf text.txt
 
