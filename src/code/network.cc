@@ -44,12 +44,12 @@ double s21::Network::TransferDerivative(double output) {
 }
 
 std::vector<double> s21::Network::ForwardProp(const std::vector<double>& input_data) {
-  std::vector<double> inputs = input_data; // getnormalizedfeaturevector
-  for (size_t i = 0; i < m_layers_.size(); ++i) {
-    Layer *layer = m_layers_.at(i);
+  std::vector<double> inputs = input_data; // получаем первый слой сети  
+  for (size_t i = 0; i < m_layers_.size(); ++i) {  // для каждого слоя
+    Layer *layer = m_layers_.at(i);  // выделяем слой
     std::vector<double> new_inputs;
-    for (Neuron* n : layer->GetNeurons()) {
-      double activation = Activate(n->GetWeights(), inputs);
+    for (Neuron* n : layer->GetNeurons()) {  // для кждого нейрона слоя
+      double activation = Activate(n->GetWeights(), inputs);  // активируем нейрон
       n->SetValue(Transfer(activation));
       new_inputs.push_back(n->GetValue());
     }
@@ -111,7 +111,7 @@ void s21::Network::Train(int epochs_count) {
   s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-train.csv");
   int index = 0;
   int curr_epochs = 0;
-  while(curr_epochs < epochs_count) {
+  while (curr_epochs < epochs_count) {
     auto input_data = data_handler.GetThisTrainSet(index);
     std::vector<double> input = input_data.first;
     std::vector<double> expected = input_data.second;
