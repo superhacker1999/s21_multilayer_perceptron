@@ -10,11 +10,9 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    painter/painter.cpp \
     view.cpp
 
 HEADERS += \
-    painter/painter.h \
     view.h
 
 FORMS += \
