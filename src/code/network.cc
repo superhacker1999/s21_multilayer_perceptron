@@ -119,7 +119,7 @@ void s21::Network::Train(int epochs_count) {
     BackProp(expected);
     UpdateWeights(input);
     // LearnOutput(expected);
-    if (index == 4440) {
+    if (index == 26640) {
       index = 0;
       ++curr_epochs;
     } else {
@@ -130,23 +130,44 @@ void s21::Network::Train(int epochs_count) {
 }
 
 void s21::Network::Test() {
-  s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-train.csv");
-  int index = 0;
-  std::cout << "I'm ready to be tested!\nPlease input index of dataset [0-88800]\nTo exit from program type '-1'";
-  std::cin >> index;
-  while (index != -1) {
-    auto input_data = data_handler.GetThisTrainSet(index);
-    std::cout << "\nits gonna be:\n";
-    for (auto it = input_data.second.begin(); it != input_data.second.end(); ++it) {
-      std::cout << *it << " ";
+  // s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-train.csv");
+  // int index = 0;
+  // std::cout << "I'm ready to be tested!\nPlease input index of dataset [0-88799]\nTo exit from program type '-1'";
+  // std::cin >> index;
+  // while (index != -1) {
+  //   auto input_data = data_handler.GetThisTrainSet(index);
+  //   std::cout << "\nits gonna be:\n";
+  //   for (auto it = input_data.second.begin(); it != input_data.second.end(); ++it) {
+  //     std::cout << *it << " ";
+  //   }
+  //   std::vector<double> outputs = ForwardProp(input_data.first);
+  //   std::cout << "\nNeuron net thinks it a:\n";
+  //   for (auto it = outputs.begin(); it != outputs.end(); ++it) {
+  //     printf("%.3f ", *it);
+  //   }
+  //   std::cin >> index;
+  // }
+
+
+  s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-test.csv");
+  int i = 0, index = 0, answer = 0, expected = 0, right_answer_count = 0;
+  while (i < 10000) {
+    index += rand() % 14799;  // 0 - 14799
+    auto data = data_handler.GetThisTrainSet(index);
+    std::vector<double> input_vec = data.first;
+    std::vector<double> answer_vec = data.second;
+    answer = Predict(input_vec);
+    expected = (int)std::distance(answer_vec.begin(), std::max_element(answer_vec.begin(), answer_vec.end()));
+    if (answer == expected) {
+      printf("\e[0;32mOK!\e[0m\n");
+      right_answer_count++;
+    } else {
+      printf("\e[0;31mFAIL\e[0m\n");
     }
-    std::vector<double> outputs = ForwardProp(input_data.first);
-    std::cout << "\nNeuron net thinks it a:\n";
-    for (auto it = outputs.begin(); it != outputs.end(); ++it) {
-      printf("%.3f ", *it);
-    }
-    std::cin >> index;
+    i++;
+    index = 0;
   }
+  printf("Right answers percentage: %.5lf %%", (double)right_answer_count / 10000 * 100);
 }
 
 double s21::Network::LearnOutput(const std::vector<double>& expected) {
@@ -186,9 +207,9 @@ void s21::Network::SaveWeights() {
   }
 }
 
-std::vector<double> s21::Network::LoadWeights() {
+std::vector<double> s21::Network::LoadWeights(const std::string& weight_path) {
   std::ifstream weights_file;
-  weights_file.open("weights.txt");
+  weights_file.open(weight_path);
   std::vector<double> loaded_weights;
   std::string file_line;
   if (weights_file.is_open()) {
