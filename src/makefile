@@ -5,12 +5,13 @@ CFLAGS:=-Wall -Wextra -lstdc++ -std=c++17
 
 learn: clean
 	$(CC) $(CFLAGS) $(SRC_LEARN)
-	./a.out
+	./a.out $(settings) > text.txt
 	bash telegram.sh "Neuron net has trained."
+	rm -rf text.txt
 
 test:
 	$(CC) $(CFLAGS) $(SRC_TEST)
-	./a.out > text.txt
+	./a.out $(filename) > text.txt
 	bash telegram.sh "Tests are done."
 	rm -rf text.txt
 
