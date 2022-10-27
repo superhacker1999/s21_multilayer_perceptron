@@ -48,7 +48,7 @@ std::vector<double> s21::Network::ForwardProp(const std::vector<double>& input_d
   for (size_t i = 0; i < m_layers_.size(); ++i) {  // для каждого слоя
     Layer *layer = m_layers_.at(i);  // выделяем слой
     std::vector<double> new_inputs;
-    for (Neuron* n : layer->GetNeurons()) {  // для кждого нейрона слоя
+    for (Neuron* n : layer->GetNeurons()) {  // для каждого нейрона слоя
       double activation = Activate(n->GetWeights(), inputs);  // активируем нейрон
       n->SetValue(Transfer(activation));
       new_inputs.push_back(n->GetValue());
