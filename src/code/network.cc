@@ -150,8 +150,8 @@ void s21::Network::Test() {
 
   s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-test.csv");
   int i = 0, index = 0, answer = 0, expected = 0, right_answer_count = 0;
-  while (i < 10000) {
-    index += rand() % 14799;  // 0 - 14799
+  while (i < 14799) {
+    // index += rand() % 14799;  // 0 - 14799
     auto data = data_handler.GetThisTrainSet(index);
     std::vector<double> input_vec = data.first;
     std::vector<double> answer_vec = data.second;
@@ -164,9 +164,10 @@ void s21::Network::Test() {
       printf("\e[0;31mFAIL\e[0m\n");
     }
     i++;
-    index = 0;
+    // index = 0;
+    index++;
   }
-  printf("Right answers percentage: %.5lf %%", (double)right_answer_count / 10000 * 100);
+  printf("Right answers percentage: %.5lf %%", (double)right_answer_count / 14799 * 100);
 }
 
 double s21::Network::LearnOutput(const std::vector<double>& expected) {
