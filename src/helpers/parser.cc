@@ -11,7 +11,6 @@ s21::Parser::Dataset Parser::Parsing(const std::string &file_name) {
     std::ifstream file(file_name);
     error_ = false;
     if (file.is_open()) {
-        std::cout<<"file is opened";
         while (getline(file, line)) {
             data_set_.push_back(StringParsing_(line));
         }

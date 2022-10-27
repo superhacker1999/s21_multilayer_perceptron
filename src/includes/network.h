@@ -4,8 +4,11 @@
 #include <vector>
 #include <map>
 #include "layer.h"
+#include "../helpers/datahandler.h"
 #include <algorithm>
 #include <iostream>
+#include <fstream>
+#include <assert.h>
 
 namespace s21 {
 class Network {
@@ -27,7 +30,10 @@ class Network {
       int Predict(const std::vector<double>& some_data); // returns the index of maximum value in the output array
       double LearnOutput(const std::vector<double>& expected);
       void Train(int);
-      // void Test();
+      void SaveWeights();
+      std::vector<double> LoadWeights();
+      void UploadWeightsToNet(std::vector<double>);
+      void Test();
       // void Validate();
     
     private:
