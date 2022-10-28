@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTimer>
 #include <QResizeEvent>
+#include <iostream>
 
 #include "scene.h"
 
@@ -22,6 +23,8 @@ public:
 private:
     Ui::painter *ui;
     Scene *scene;
+private slots:
+    void onPredictButtonClicked_();
 };
 
 } // namespace s21

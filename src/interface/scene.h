@@ -2,6 +2,7 @@
 #define S21_SCENE_H
 
 #include <QGraphicsScene>
+#include <QGraphicsSceneEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QTimer>
 
