@@ -6,6 +6,7 @@
 #include <QResizeEvent>
 #include <iostream>
 
+#include "../includes/network.h"
 #include "scene.h"
 
 namespace s21 {
@@ -23,6 +24,7 @@ public:
 private:
     Ui::painter *ui;
     Scene *scene;
+    s21::Network *net_;
 private slots:
     void onPredictButtonClicked_();
 };

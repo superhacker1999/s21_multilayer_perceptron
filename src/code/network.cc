@@ -106,12 +106,13 @@ int s21::Network::Predict(const std::vector<double>& input_data) {
   return std::distance(outputs.begin(), std::max_element(outputs.begin(), outputs.end()));
 }
 
-void s21::Network::Train(int epochs_count) {
+void s21::Network::Train(int epochs_count, int percentage) {
   // case 1
   s21::DataHandler data_handler("/Users/padmemur/Desktop/neuron_net/dataset/emnist-letters-train.csv");
   int index = 0;
   int curr_epochs = 0;
-  while (curr_epochs < epochs_count) {
+  int index_max = 14799 * percentage / 100;
+  while(curr_epochs < epochs_count) {
     auto input_data = data_handler.GetThisTrainSet(index);
     std::vector<double> input = input_data.first;
     std::vector<double> expected = input_data.second;
@@ -119,7 +120,7 @@ void s21::Network::Train(int epochs_count) {
     BackProp(expected);
     UpdateWeights(input);
     // LearnOutput(expected);
-    if (index == 26640) {
+    if (index == index_max) {
       index = 0;
       ++curr_epochs;
     } else {
@@ -190,10 +191,10 @@ double s21::Network::GetOutputError_(const std::vector<double>& expected) {
   return output_err * 0.5f;
 }
 
-void s21::Network::SaveWeights() {
+void s21::Network::SaveWeights(std::string weight_name) {
   int counter = 0;
   std::ofstream weights_file;
-  weights_file.open("weights.txt");
+  weights_file.open("weights" + weight_name + ".txt");
   if (weights_file.is_open()) {
     for (size_t i = 0; i < m_layers_.size(); ++i) {  // 0 - 4
       for (size_t j = 0; j < m_layers_.at(i)->GetNeurons().size(); ++j) {  // 0 - 784

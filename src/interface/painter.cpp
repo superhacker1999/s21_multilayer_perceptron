@@ -5,6 +5,8 @@ s21::painter::painter(QWidget *parent)
     : QWidget(parent)
     , ui(new s21::Ui::painter)
 {
+    net_ = new s21::Network({50, 30}, 784, 26, 0.05);
+    net_->UploadWeightsToNet(net_->LoadWeights("/Users/padmemur/Desktop/neuron_net/src/weights26640x100x005.txt"));  // загрузить выгруженные веса
     ui->setupUi(this);
     connect(ui->predict_button, SIGNAL(clicked()), this, SLOT(onPredictButtonClicked_()));
 
@@ -33,6 +35,5 @@ void s21::painter::onPredictButtonClicked_() {
       input_data.push_back(((red + green + blue) / 3.0) / 255.0);
     }
   }
-  for (auto it = input_data.begin(); it != input_data.end(); ++it)
-    std::cout << *it << " ";
+  std::cout << net_->Predict(input_data);
 }
