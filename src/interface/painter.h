@@ -10,6 +10,7 @@
 #include <QGraphicsBlurEffect>
 #include "scene.h"
 #include <QGraphicsPixmapItem>
+#include <QDebug>
 
 namespace s21 {
 
@@ -30,6 +31,7 @@ private:
     QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
 private slots:
     void onPredictButtonClicked_();
+    void clearScene_();
 };
 
 } // namespace s21

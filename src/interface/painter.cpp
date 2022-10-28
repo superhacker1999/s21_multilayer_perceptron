@@ -12,11 +12,17 @@ s21::painter::painter(QWidget *parent)
 
     scene = new Scene();
     ui->painter_obj->setScene(scene);
+    ui->painter_obj->setStyleSheet("background-color:black;");
+    connect(ui->delete_nah, SIGNAL(clicked()), this, SLOT(clearScene_()));
 }
 
 s21::painter::~painter()
 {
     delete ui;
+}
+
+void s21::painter::clearScene_() {
+    scene->clear();
 }
 
 QImage s21::painter::applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent)
@@ -38,27 +44,43 @@ QImage s21::painter::applyEffectToImage(QImage src, QGraphicsEffect *effect, int
 
 void s21::painter::onPredictButtonClicked_() {
   std::vector<double> input_data;
-//  QSize new_size(28, 28);
   QPixmap pixmap = ui->painter_obj->grab();
+//  QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
+//  blur->setBlurRadius(8);
+//  QImage image = pixmap.toImage();
+//  QImage result = applyEffectToImage(image, blur);
+//  pixmap = QPixmap::fromImage(result).scaled(28, 28, Qt::KeepAspectRatio, Qt::FastTransformation);
   pixmap = pixmap.scaled(28, 28, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-//  QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
-//  blur->setBlurRadius(1);
+//  result = pixmap.toImage();
   QImage image = pixmap.toImage();
-//  QImage result = applyEffectToImage(image, blur);
   QColor pixel_;
   int red, green, blue;
+  double max = -1.0;
   for (int i = 0; i < image.height(); ++i) {
     for (int j = 0; j < image.width(); ++j) {
       pixel_ = image.pixel(j, i);
       pixel_.getRgb(&red, &green, &blue);
-      input_data.push_back((299 * red + 587 * green + 114 * blue) / 1000 );
+      double colour = (red + green + blue) / 3.0;
+      if (colour > max) max = colour;
+      input_data.push_back(double(red + green + blue) / 3.0);
     }
   }
-  int i = 0;
+
   for (auto it = input_data.begin(); it != input_data.end(); ++it) {
-      if (i % 28 == 0) std::cout << "\n";
-      i++;
-      printf("%.0lf ", *it);
+      *it = *it / max;
   }
+  ui->label->setText(QString::number(net_->Predict(input_data)));
+  auto res_vec = net_->Predict_test(input_data);
+  for (auto it = res_vec.begin(); it != res_vec.end(); ++it) {
+    qDebug() << *it << " ";
+  }
+
+
+//  int i = 0;
+//  for (auto it = input_data.begin(); it != input_data.end(); ++it) {
+//      if (i % 28 == 0) std::cout << "\n";
+//      i++;
+//      printf("%3.2lf ", *it);
+//  }
 }

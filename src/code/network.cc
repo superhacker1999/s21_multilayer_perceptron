@@ -101,16 +101,21 @@ void s21::Network::UpdateWeights(const std::vector<double>& input_data) {
   }
 }
 
-std::vector<double> s21::Network::Predict(const std::vector<double>& input_data) {
+int s21::Network::Predict(const std::vector<double>& input_data) {
   std::vector<double> outputs = ForwardProp(input_data);
-  // double max = outputs[0];
-  // int index;
-  // for (size_t i = 0; i < outputs.size(); ++i) {
-  //   if (outputs[i] > max) {
-  //     max = outputs[i];
-  //     index = i;
-  //   }
-  // }
+  double max = outputs[0];
+  int index;
+  for (size_t i = 0; i < outputs.size(); ++i) {
+    if (outputs[i] > max) {
+      max = outputs[i];
+      index = i;
+    }
+  }
+  return index + 1;
+}
+
+std::vector<double> s21::Network::Predict_test(const std::vector<double>& input_data) {
+  std::vector<double> outputs = ForwardProp(input_data);
   return outputs;
 }
 
