@@ -101,9 +101,17 @@ void s21::Network::UpdateWeights(const std::vector<double>& input_data) {
   }
 }
 
-int s21::Network::Predict(const std::vector<double>& input_data) {
+std::vector<double> s21::Network::Predict(const std::vector<double>& input_data) {
   std::vector<double> outputs = ForwardProp(input_data);
-  return std::distance(outputs.begin(), std::max_element(outputs.begin(), outputs.end()));
+  // double max = outputs[0];
+  // int index;
+  // for (size_t i = 0; i < outputs.size(); ++i) {
+  //   if (outputs[i] > max) {
+  //     max = outputs[i];
+  //     index = i;
+  //   }
+  // }
+  return outputs;
 }
 
 void s21::Network::Train(int epochs_count, int percentage) {
@@ -157,7 +165,7 @@ void s21::Network::Test() {
     auto data = data_handler.GetThisTrainSet(index);
     std::vector<double> input_vec = data.first;
     std::vector<double> answer_vec = data.second;
-    answer = Predict(input_vec);
+//    answer = Predict(input_vec);
     expected = (int)std::distance(answer_vec.begin(), std::max_element(answer_vec.begin(), answer_vec.end()));
     if (answer == expected) {
       printf("\e[0;32mOK!\e[0m\n");

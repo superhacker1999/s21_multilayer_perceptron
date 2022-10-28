@@ -7,7 +7,9 @@
 #include <iostream>
 
 #include "../includes/network.h"
+#include <QGraphicsBlurEffect>
 #include "scene.h"
+#include <QGraphicsPixmapItem>
 
 namespace s21 {
 
@@ -25,6 +27,7 @@ private:
     Ui::painter *ui;
     Scene *scene;
     s21::Network *net_;
+    QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
 private slots:
     void onPredictButtonClicked_();
 };

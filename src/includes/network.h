@@ -27,7 +27,7 @@ class Network {
       double TransferDerivative(double);  // used for backprop
       void BackProp(const std::vector<double>& expected_data);
       void UpdateWeights(const std::vector<double>& some_data);
-      int Predict(const std::vector<double>& some_data); // returns the index of maximum value in the output array
+      std::vector<double> Predict(const std::vector<double>& some_data); // returns the index of maximum value in the output array
       double LearnOutput(const std::vector<double>& expected);
       void Train(int, int);
       void SaveWeights(std::string);
