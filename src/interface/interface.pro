@@ -10,15 +10,15 @@ CONFIG += c++17
 
 SOURCES += \
     main.cpp \
-    painter/painter.cpp \
-    view.cpp
+    painter.cpp \
+    scene.cpp
 
 HEADERS += \
-    painter/painter.h \
-    view.h
+    painter.h \
+    scene.h
 
 FORMS += \
-    view.ui
+    painter.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

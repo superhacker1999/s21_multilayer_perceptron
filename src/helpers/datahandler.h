@@ -12,10 +12,8 @@ class DataHandler {
     using train_dataset = std::vector<double>;
     using train_answer = std::vector<double>;
 
-
-  DataHandler(const std::string& file_name) {
-    data_ = parser_.Parsing(file_name);
-  }
+  DataHandler(const std::string& file_name) 
+      : data_(parser_.Parsing(file_name)) {}
   // pos should be 0 - 88800
   std::pair<train_dataset, train_answer> GetThisTrainSet(int pos) {
     if (parser_.get_error()) throw std::out_of_range("Couldnt parse file");
@@ -29,8 +27,9 @@ class DataHandler {
     Parser parser_;
 
     std::pair<train_dataset, train_answer> NormalizeData_(const std::vector<int>& parsed_data) {
-      std::vector<double> answer(26, 0.0);
-      answer[parsed_data[0] - 1] = 1.0;
+      std::vector<double> answer(26, 0.0);  // вектор с ответами
+      answer[parsed_data[0] - 1] = 1.0;  // число с индексом ответа из первой строки parsed_data
+      // становится единицей
       std::vector<double> normalized_input(parsed_data.size() - 1);
       auto it = parsed_data.begin() + 1;
       for (size_t i = 0; it != parsed_data.end(); ++it, ++i)
