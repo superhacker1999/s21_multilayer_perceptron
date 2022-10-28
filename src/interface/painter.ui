@@ -6,21 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>995</width>
+    <height>875</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>painter</string>
   </property>
-  <widget class="QGraphicsView" name="graphicsView">
+  <widget class="QGraphicsView" name="painter_obj">
    <property name="geometry">
     <rect>
-     <x>30</x>
-     <y>80</y>
-     <width>256</width>
-     <height>192</height>
+     <x>20</x>
+     <y>20</y>
+     <width>661</width>
+     <height>661</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="predict_button">
+   <property name="geometry">
+    <rect>
+     <x>740</x>
+     <y>100</y>
+     <width>181</width>
+     <height>71</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>PushButton</string>
    </property>
   </widget>
  </widget>
