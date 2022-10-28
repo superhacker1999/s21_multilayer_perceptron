@@ -8,8 +8,7 @@ s21::painter::painter(QWidget *parent)
     ui->setupUi(this);
 
     scene = new Scene();
-//    ui->graphicsView->setScene(scene);
-//    ui->graphicsView->;
+    ui->graphicsView->setScene(scene);
 }
 
 s21::painter::~painter()
