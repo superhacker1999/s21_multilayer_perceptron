@@ -1,11 +1,11 @@
-#include "view.h"
+#include "painter.h"
 
 #include <QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    view w;
+    s21::painter w;
     w.show();
     return a.exec();
 }
