@@ -11,6 +11,7 @@
 #include "scene.h"
 #include <QGraphicsPixmapItem>
 #include <QDebug>
+#include <map>
 
 namespace s21 {
 
@@ -29,6 +30,8 @@ private:
     Scene *scene;
     s21::Network *net_;
     QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
+    std::map<int, char> alphabet_;
+    void fillAlphabet_();
 private slots:
     void onPredictButtonClicked_();
     void clearScene_();
