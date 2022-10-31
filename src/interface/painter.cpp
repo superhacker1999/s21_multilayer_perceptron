@@ -25,8 +25,8 @@ s21::painter::~painter()
 }
 
 void s21::painter::fillAlphabet_() {
-    for (int i = 0; i < 26; ++i)
-       alphabet_.insert(std::make_pair(i, static_cast<char>('A' + i)));
+    for (int i = 1; i <= 26; ++i)
+       alphabet_.insert(std::make_pair(i, static_cast<char>('A' + i - 1)));
 }
 
 void s21::painter::clearScene_() {

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>995</width>
-    <height>875</height>
+    <width>705</width>
+    <height>488</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,40 +53,54 @@
   <widget class="QPushButton" name="predict_button">
    <property name="geometry">
     <rect>
-     <x>740</x>
-     <y>100</y>
-     <width>181</width>
-     <height>71</height>
+     <x>490</x>
+     <y>40</y>
+     <width>171</width>
+     <height>61</height>
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Запустить нейросеть
+(выпустить кракена)</string>
    </property>
   </widget>
   <widget class="QPushButton" name="delete_nah">
    <property name="geometry">
     <rect>
-     <x>710</x>
-     <y>220</y>
-     <width>161</width>
-     <height>32</height>
+     <x>490</x>
+     <y>230</y>
+     <width>171</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
-    <string>очистить нах</string>
+    <string>Очистить окно</string>
    </property>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>690</x>
-     <y>315</y>
-     <width>141</width>
-     <height>91</height>
+     <x>490</x>
+     <y>160</y>
+     <width>131</width>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string/>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>121</y>
+     <width>171</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Скорее всего это буква...</string>
    </property>
   </widget>
  </widget>
