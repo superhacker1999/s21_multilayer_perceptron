@@ -234,7 +234,7 @@ std::vector<double> s21::Network::LoadWeights(const std::string& weight_path) {
         file_line.erase(0, file_line.find_first_of('/') + 1);
       }
     }
-    assert(loaded_weights.size() == 41586);
+    // assert(loaded_weights.size() == 41586);
   } else {
     throw std::length_error("There is no file with weights\nPlease teach 'em");
   }
