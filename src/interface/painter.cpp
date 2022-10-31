@@ -13,6 +13,8 @@ s21::painter::painter(QWidget *parent)
 
     scene = new Scene();
     ui->painter_obj->setScene(scene);
+    ui->painter_obj->setFixedSize(420, 420);
+    ui->painter_obj->setSceneRect(0, 0, 420, 420);
     ui->painter_obj->setStyleSheet("background-color:black;");
     connect(ui->delete_nah, SIGNAL(clicked()), this, SLOT(clearScene_()));
 }
