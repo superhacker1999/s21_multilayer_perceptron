@@ -80,7 +80,6 @@ void s21::painter::onPredictButtonClicked_() {
       *it = *it / max;
   }
   auto letter = alphabet_.find(net_->Predict(input_data));
-  qDebug() << (*letter).second << " ";
   if (letter != alphabet_.end()) {
     ui->label->setText(QString((*letter).second));
   } else {
