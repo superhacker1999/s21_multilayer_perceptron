@@ -12,6 +12,7 @@
 #include <QGraphicsPixmapItem>
 #include <QDebug>
 #include <map>
+#include <fstream>
 
 namespace s21 {
 

@@ -49,6 +49,17 @@ QImage s21::painter::applyEffectToImage(QImage src, QGraphicsEffect *effect, int
     return res;
 }
 
+void writeLetterToFile(std::vector <double> input_data, std::string answer) {
+    std::ofstream test_file;
+    test_file.open("/Users/ritapryanik/Desktop/mlp/dataset/interface-letters.txt", std::ios::app);
+    test_file << answer << ",";
+    for (size_t i = 0; i < input_data.size(); i++)
+    {
+      test_file << input_data[i] << ",";
+    }
+    test_file << "\n";
+
+}
 
 void s21::painter::onPredictButtonClicked_() {
   std::vector<double> input_data;
@@ -79,6 +90,7 @@ void s21::painter::onPredictButtonClicked_() {
   for (auto it = input_data.begin(); it != input_data.end(); ++it) {
       *it = *it / max;
   }
+  writeLetterToFile(input_data, ui->answer->text().toStdString());
   auto letter = alphabet_.find(net_->Predict(input_data));
   if (letter != alphabet_.end()) {
     ui->label->setText(QString((*letter).second));
@@ -99,3 +111,5 @@ void s21::painter::onPredictButtonClicked_() {
 //      printf("%3.2lf ", *it);
 //  }
 }
+
+

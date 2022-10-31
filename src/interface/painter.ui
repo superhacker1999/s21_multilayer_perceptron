@@ -82,7 +82,7 @@
     <rect>
      <x>490</x>
      <y>160</y>
-     <width>131</width>
+     <width>161</width>
      <height>41</height>
     </rect>
    </property>
@@ -101,6 +101,30 @@
    </property>
    <property name="text">
     <string>Скорее всего это буква...</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>280</y>
+     <width>121</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Правильный ответ 
+(номер буквы):</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="answer">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>340</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
    </property>
   </widget>
  </widget>
