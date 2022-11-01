@@ -12,8 +12,9 @@ class DataHandler {
     using train_dataset = std::vector<double>;
     using train_answer = std::vector<double>;
 
-  DataHandler(const std::string& file_name) 
-      : data_(parser_.Parsing(file_name)) {}
+  DataHandler(const std::string& file_name) {
+    data_ = parser_.Parsing(file_name);
+  }
   // pos should be 0 - 88800
   std::pair<train_dataset, train_answer> GetThisTrainSet(int pos) {
     if (parser_.get_error()) throw std::out_of_range("Couldnt parse file");

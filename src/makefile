@@ -4,9 +4,10 @@ SRC_TEST:=code/layer.cc code/network.cc code/neuron.cc code/test.cc $(PWD)/helpe
 CFLAGS:=-Wall -Wextra -lstdc++ -std=c++17
 
 learn: clean
-	$(CC) $(CFLAGS) $(SRC_LEARN)
+	$(CC) $(CFLAGS) $(SRC_LEARN) -g
 	./a.out $(alpha) $(percent) $(epochs) > text.txt
 	bash telegram.sh "Neuron net has trained."
+	echo cat text.txt | tail -n1
 	rm -rf text.txt
 
 test:
@@ -21,3 +22,4 @@ debug: clean
 clean:
 	rm -rf output.txt
 	rm -rf a.out*
+	rm -rf text.txt
