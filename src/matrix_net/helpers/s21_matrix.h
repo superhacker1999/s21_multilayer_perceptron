@@ -34,8 +34,9 @@ class S21Matrix {
     int k = 1;
     for (int i = 0; i < this->rows_; i++)
       for (int j = 0; j < this->columns_; j++)
-        // this->matrix_[i][j] = random ? GenerateRandomNumber(-1.00, 1.00) : k++;
-        matrix_[i][j] = 0.1;
+        matrix_[i][j] = random ?
+          GenerateRandomNumber(-1.00, 1.00) :
+          k++;
   }
   void FillMatrix(double num) {
     for (int i = 0; i < this->rows_; i++)
@@ -224,25 +225,10 @@ class S21Matrix {
     }
   }
 
-  void MulMatrix(const S21Matrix& other) {
+  S21Matrix MulMatrix(const S21Matrix& other) {
     if (IsNull_(*this, other) || this->columns_ != other.rows_)
       throw std::out_of_range("Out of range");
     S21Matrix res_matrix(this->rows_, other.columns_);
-    if (!IsNull_(res_matrix)) {
-      for (int i = 0; i < this->rows_; i++)
-        for (int j = 0; j < other.columns_; j++)
-          for (int k = 0; k < this->columns_; k++)
-            res_matrix.matrix_[i][j] +=
-                this->matrix_[i][k] * other.matrix_[k][j];
-      *this = res_matrix;
-    }
-  }
-
-  S21Matrix MulMatrixWithBias(const S21Matrix& other, double bias) {
-    if (IsNull_(*this, other) || this->columns_ != other.rows_)
-      throw std::out_of_range("Out of range");
-    S21Matrix res_matrix(this->rows_, other.columns_);
-    res_matrix.FillMatrix(bias);
     for (int i = 0; i < this->rows_; i++)
       for (int j = 0; j < other.columns_; j++)
         for (int k = 0; k < this->columns_; k++)

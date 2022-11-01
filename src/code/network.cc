@@ -80,6 +80,7 @@ void s21::Network::BackProp(const std::vector<double>& expected_data) {
       Neuron* n = layer->GetNeurons().at(j);
       n->SetDelta(errors.at(j) * TransferDerivative(n->GetValue()));  // gradient / derivative part of back prop
     }
+    // errors.clear(); // происходит неявно
   }
 }
 
