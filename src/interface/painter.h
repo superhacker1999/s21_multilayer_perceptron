@@ -34,12 +34,11 @@ private:
     QPixmap letter_;
     QLabel *picture_place_;
     s21::Network *net_;
-    QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
     std::map<int, char> alphabet_;
     void fillAlphabet_();
-    void addBlur_();
     QColor inverseColors_(QColor pixel);
-    void noBlur_();
+    void compressImage_();
+    void normalizeData_(std::vector<double> &input_data, double max);
 
 private slots:
     void onPredictButtonClicked_();
