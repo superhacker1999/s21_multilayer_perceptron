@@ -8,20 +8,46 @@ s21::painter::painter(QWidget *parent)
     net_ = new s21::Network({50, 30}, 784, 26, 0.05);
     net_->UploadWeightsToNet(net_->LoadWeights("/Users/ritapryanik/Desktop/mlp/src/weights26640x100x005.txt"));  // загрузить выгруженные веса
     ui->setupUi(this);
+    ui->predict_button->setEnabled(false);
+    ui->choose_image->setEnabled(false);
+    connect(ui->picture, SIGNAL(toggled(bool)), this, SLOT(enableUploading_()));
+    connect(ui->choose_image, SIGNAL(clicked()), this, SLOT(uploadImage_()));
+    connect(ui->paint, SIGNAL(toggled(bool)), this, SLOT(paintLetter_()));
     connect(ui->predict_button, SIGNAL(clicked()), this, SLOT(onPredictButtonClicked_()));
     fillAlphabet_();
-
-    scene = new Scene();
-    ui->painter_obj->setScene(scene);
-    ui->painter_obj->setFixedSize(420, 420);
-    ui->painter_obj->setSceneRect(0, 0, 420, 420);
-    ui->painter_obj->setStyleSheet("background-color:black;");
     connect(ui->delete_nah, SIGNAL(clicked()), this, SLOT(clearScene_()));
+
+    picture_place_ = new QLabel(this);
+    picture_place_->setGeometry(28, 28, 420, 420);
 }
 
 s21::painter::~painter()
 {
     delete ui;
+}
+
+void s21::painter::paintLetter_() {
+    ui->choose_image->setEnabled(false);
+    picture_place_->hide();
+    scene = new Scene();
+    ui->painter_obj->setScene(scene);
+    ui->painter_obj->setFixedSize(420, 420);
+    ui->painter_obj->setSceneRect(0, 0, 420, 420);
+    ui->painter_obj->setStyleSheet("background-color:white;");
+    ui->predict_button->setEnabled(true);
+}
+
+void s21::painter::enableUploading_() {
+    ui->choose_image->setEnabled(true);
+}
+
+void s21::painter::uploadImage_() {
+    QString file_path = QFileDialog::getOpenFileName(this, tr("Upload image"), QDir::homePath());
+    QPixmap letter = QPixmap(file_path);
+    picture_place_->setPixmap(letter);
+    picture_place_->show();
+    letter_ = letter;
+    ui->predict_button->setEnabled(true);
 }
 
 void s21::painter::fillAlphabet_() {
@@ -30,22 +56,22 @@ void s21::painter::fillAlphabet_() {
 }
 
 void s21::painter::clearScene_() {
+    picture_place_->hide();
     scene->clear();
 }
 
-QImage s21::painter::applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent)
-{
-    if (src.isNull()) return QImage();   //No need to do anything else!
-    if (!effect) return src;             //No need to do anything else!
+QImage s21::painter::applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent) {
+    if (src.isNull()) return QImage();
+    if (!effect) return src;
     QGraphicsScene scene;
     QGraphicsPixmapItem item;
     item.setPixmap(QPixmap::fromImage(src));
     item.setGraphicsEffect(effect);
     scene.addItem(&item);
-    QImage res(src.size()+QSize(extent*2, extent*2), QImage::Format_ARGB32);
+    QImage res(src.size()+QSize(extent * 2, extent * 2), QImage::Format_ARGB32);
     res.fill(Qt::transparent);
     QPainter ptr(&res);
-    scene.render(&ptr, QRectF(), QRectF( -extent, -extent, src.width()+extent*2, src.height()+extent*2 ) );
+    scene.render(&ptr, QRectF(), QRectF( -extent, -extent, src.width() + extent * 2, src.height() + extent * 2 ) );
     return res;
 }
 
@@ -61,26 +87,41 @@ void writeLetterToFile(std::vector <double> input_data, std::string answer) {
 
 }
 
+void s21::painter::addBlur_() {
+    if (ui->paint->isChecked()) {
+        letter_ = ui->painter_obj->grab();
+    }
+    QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
+    blur->setBlurRadius(8);
+    QImage image = letter_.toImage();
+
+    QImage result = applyEffectToImage(image, blur);
+    letter_ = QPixmap::fromImage(result).scaled(28, 28, Qt::KeepAspectRatio, Qt::FastTransformation);
+}
+
+void s21::painter::noBlur_() {
+    if (ui->paint->isChecked()) {
+        letter_ = ui->painter_obj->grab();
+    }
+    letter_ = letter_.scaled(28, 28, Qt::KeepAspectRatio, Qt::FastTransformation);
+}
+
 void s21::painter::onPredictButtonClicked_() {
-  std::vector<double> input_data;
-  QPixmap pixmap = ui->painter_obj->grab();
-  QGraphicsBlurEffect *blur = new QGraphicsBlurEffect;
-  blur->setBlurRadius(8);
-  QImage image = pixmap.toImage();
-
-  QImage result = applyEffectToImage(image, blur);
-  pixmap = QPixmap::fromImage(result).scaled(28, 28, Qt::KeepAspectRatio, Qt::FastTransformation);
-//  pixmap = pixmap.scaled(28, 28, Qt::KeepAspectRatio, Qt::FastTransformation);
-
-  result = pixmap.toImage();
-//  QImage image = pixmap.toImage();
+//  addBlur_();
+  noBlur_();
+  QImage result = letter_.toImage();
   QColor pixel_;
+  std::vector<double> input_data;
   int red, green, blue;
   double max = -1.0;
   for (int i = 0; i < result.height(); ++i) {
     for (int j = 0; j < result.width(); ++j) {
       pixel_ = result.pixel(i, j);
       pixel_.getRgb(&red, &green, &blue);
+      std::cout << red << " " << green << " " << blue << std::endl;
+      red = 255 - red;
+      green = 255 - green;
+      blue = 255 - blue;
       double colour = (red + green + blue) / 3.0;
       if (colour > max) max = colour;
       input_data.push_back(double(red + green + blue) / 3.0);
@@ -88,7 +129,7 @@ void s21::painter::onPredictButtonClicked_() {
   }
 
   for (auto it = input_data.begin(); it != input_data.end(); ++it) {
-      *it = *it / max;
+      if (*it != 0) *it = *it / max;
   }
   writeLetterToFile(input_data, ui->answer->text().toStdString());
   auto letter = alphabet_.find(net_->Predict(input_data));
@@ -103,13 +144,6 @@ void s21::painter::onPredictButtonClicked_() {
 //    qDebug() << *it << " ";
 //  }
 
-
-//  int i = 0;
-//  for (auto it = input_data.begin(); it != input_data.end(); ++it) {
-//      if (i % 28 == 0) std::cout << "\n";
-//      i++;
-//      printf("%3.2lf ", *it);
-//  }
 }
 
 

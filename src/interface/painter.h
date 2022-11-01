@@ -13,6 +13,8 @@
 #include <QDebug>
 #include <map>
 #include <fstream>
+#include <QFileDialog>
+#include <QLabel>
 
 namespace s21 {
 
@@ -29,13 +31,23 @@ public:
 private:
     Ui::painter *ui;
     Scene *scene;
+    QPixmap letter_;
+    QLabel *picture_place_;
     s21::Network *net_;
     QImage applyEffectToImage(QImage src, QGraphicsEffect *effect, int extent = 0);
     std::map<int, char> alphabet_;
     void fillAlphabet_();
+    void addBlur_();
+    QColor inverseColors_(QColor pixel);
+    void noBlur_();
+
 private slots:
     void onPredictButtonClicked_();
     void clearScene_();
+    void uploadImage_();
+    void paintLetter_();
+    void enableUploading_();
+
 };
 
 } // namespace s21

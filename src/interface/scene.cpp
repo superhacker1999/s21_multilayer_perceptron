@@ -18,7 +18,7 @@ void s21::Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
                10,
                10,
                QPen(Qt::NoPen),
-               QBrush(Qt::white));
+               QBrush(Qt::black));
     // Сохраняем координаты точки нажатия
     previousPoint = event->scenePos();
 }
@@ -30,7 +30,7 @@ void s21::Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
             previousPoint.y(),
             event->scenePos().x(),
             event->scenePos().y(),
-            QPen(QColor::fromRgb(255, 255, 255), 40, Qt::SolidLine, Qt::RoundCap));
+            QPen(QColor::fromRgb(0, 0, 0), 40, Qt::SolidLine, Qt::RoundCap));
     // Обновляем данные о предыдущей координате
     previousPoint = event->scenePos();
 }

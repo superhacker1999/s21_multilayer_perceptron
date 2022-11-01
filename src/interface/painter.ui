@@ -54,7 +54,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>40</y>
+     <y>150</y>
      <width>171</width>
      <height>61</height>
     </rect>
@@ -68,7 +68,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>230</y>
+     <y>300</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -81,7 +81,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>160</y>
+     <y>250</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -94,7 +94,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>121</y>
+     <y>220</y>
      <width>171</width>
      <height>20</height>
     </rect>
@@ -107,7 +107,7 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>280</y>
+     <y>350</y>
      <width>121</width>
      <height>61</height>
     </rect>
@@ -121,10 +121,49 @@
    <property name="geometry">
     <rect>
      <x>490</x>
-     <y>340</y>
+     <y>410</y>
      <width>113</width>
      <height>21</height>
     </rect>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="paint">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>50</y>
+     <width>171</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Написать букву в окне</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="picture">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>80</y>
+     <width>181</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Загрузить изображение</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="choose_image">
+   <property name="geometry">
+    <rect>
+     <x>490</x>
+     <y>110</y>
+     <width>171</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Выбрать изображение</string>
    </property>
   </widget>
  </widget>
