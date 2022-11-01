@@ -22,20 +22,43 @@ class S21Matrix {
  public:
   //  Methods for filling matrix
 
-  double GenerateRandomNumber(double min, double max) {
+  double Transfer(double value) {
+    return 1.0 / (1.0 + exp(-value));
+  }
+
+  static double GenerateRandomNumber(double min, double max) {
     double random = (double) rand() / RAND_MAX;
     return min + random * (max - min);
   }
   void FillMatrix(bool random = false) {
     int k = 1;
     for (int i = 0; i < this->rows_; i++)
-      for (int j = 0; j < this->columns_; j++) this->matrix_[i][j] = random ? GenerateRandomNumber(-1.00, 1.00) : k++;
+      for (int j = 0; j < this->columns_; j++)
+        // this->matrix_[i][j] = random ? GenerateRandomNumber(-1.00, 1.00) : k++;
+        matrix_[i][j] = 0.1;
   }
-  void SetValues(const double* num_array) {
+  void FillMatrix(double num) {
+    for (int i = 0; i < this->rows_; i++)
+      for (int j = 0; j < this->columns_; j++) this->matrix_[i][j] = num;
+  }
+  void SetValues(const std::vector<double>& num_array) {
     int k = 0;
     for (int i = 0; i < this->rows_; i++)
       for (int j = 0; j < this->columns_; j++)
         this->matrix_[i][j] = num_array[k++];
+  }
+  void TransferMatrix() {
+    for (int i = 0; i < rows_; ++i)
+      for (int j = 0; j < columns_; ++j)
+        matrix_[i][j] = Transfer(matrix_[i][j]);
+  }
+  void OutputMatrix() {
+    for (int i = 0; i < rows_; ++i) {
+      for (int j = 0; j < columns_; ++j) {
+        std::cout << matrix_[i][j] << " ";
+      }
+      std::cout << std::endl;
+    }
   }
 
   //  Constructors and destructor
@@ -215,6 +238,19 @@ class S21Matrix {
     }
   }
 
+  S21Matrix MulMatrixWithBias(const S21Matrix& other, double bias) {
+    if (IsNull_(*this, other) || this->columns_ != other.rows_)
+      throw std::out_of_range("Out of range");
+    S21Matrix res_matrix(this->rows_, other.columns_);
+    res_matrix.FillMatrix(bias);
+    for (int i = 0; i < this->rows_; i++)
+      for (int j = 0; j < other.columns_; j++)
+        for (int k = 0; k < this->columns_; k++)
+          res_matrix.matrix_[i][j] +=
+              this->matrix_[i][k] * other.matrix_[k][j];
+    return res_matrix;
+  }
+
   S21Matrix Transpose() {
     S21Matrix res_matrix(this->columns_, this->rows_);
     if (!IsNull_(*this, res_matrix)) {
@@ -223,51 +259,6 @@ class S21Matrix {
           res_matrix.matrix_[j][i] = this->matrix_[i][j];
     }
     return res_matrix;
-  }
-
-  S21Matrix CalcComplements() {
-    S21Matrix result_mtrx(this->rows_, this->columns_);
-    if (IsNull_(*this, result_mtrx) && !(this->IsSquared_()))
-      throw std::out_of_range("Out of range");
-    S21Matrix minor(this->rows_ - 1, this->columns_ - 1);
-    for (int i = 0; i < this->rows_; i++)
-      for (int j = 0; j < this->columns_; j++) {
-        FillMinorMatrix(*this, i, j, &minor);
-        result_mtrx.matrix_[i][j] = pow(-1, i + j + 2) * minor.Determinant();
-      }
-    return result_mtrx;
-  }
-
-  double Determinant() {
-    if (!IsSquared_()) throw std::out_of_range("Out of range");
-    double determinant = 0;
-    return FindDeterminant_(*this, &determinant);
-  }
-
-  S21Matrix InverseMatrix() {
-    S21Matrix res_mtrx = *this;
-    if (fabs(this->Determinant()) < EPS)
-      throw std::out_of_range("Out of range");
-    res_mtrx = res_mtrx.Transpose().CalcComplements();
-    res_mtrx.MulNumber(1.0f / this->Determinant());
-    return res_mtrx;
-  }
-
-  void FillMinorMatrix(const S21Matrix& prev_matrix, int deleted_row,
-                       int deleted_col, S21Matrix* minor) {
-    if ((*minor).matrix_ != nullptr) {
-      for (int row = 0, row_small = 0; row < prev_matrix.rows_; row++) {
-        if (row != deleted_row) {
-          for (int col = 0, col_small = 0; col < prev_matrix.columns_; col++) {
-            if (col != deleted_col) {
-              (*minor).matrix_[row_small][col_small++] =
-                  prev_matrix.matrix_[row][col];
-            }
-          }
-          row_small++;
-        }
-      }
-    }
   }
 
   static std::vector<double> MatrixToVector(const S21Matrix& matrix) {
@@ -299,26 +290,6 @@ class S21Matrix {
     for (int i = 0; i < this->rows_; i++)
       for (int j = 0; j < this->columns_; j++)
         this->matrix_[i][j] = other.matrix_[i][j];
-  }
-
-  double FindDeterminant_(const S21Matrix& matrix, double* determinant) {
-    *determinant = 0;
-    if (matrix.rows_ == 1) {
-      *determinant = matrix.matrix_[0][0];
-    } else if (matrix.rows_ == 2) {
-      *determinant = matrix.matrix_[0][0] * matrix.matrix_[1][1] -
-                     matrix.matrix_[0][1] * matrix.matrix_[1][0];
-    } else {
-      S21Matrix minor_matrix(matrix.rows_ - 1, matrix.columns_ - 1);
-      for (int i = 0; i < matrix.columns_; i++) {
-        double tmp = 0;
-        FillMinorMatrix(matrix, 0, i, &minor_matrix);
-        FindDeterminant_(minor_matrix, &tmp);
-        tmp *= pow(-1, i + 2);
-        *determinant += (matrix.matrix_[0][i]) * tmp;
-      }
-    }
-    return *determinant;
   }
 
   bool IsRowsAndColsEq_(const S21Matrix& matrix1, const S21Matrix& matrix2) {

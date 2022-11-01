@@ -9,6 +9,7 @@ s21::matrix::Network::Network(std::vector<int> spec, size_t input_size,
 size_t num_classes, double learning_rate) : m_alpha_(learning_rate) {
   InitializeLayers_(spec, input_size, num_classes);
   InitializeWeights_();
+  InitializeBiases_();
 }
 
 s21::matrix::Network::~Network() {
@@ -31,13 +32,29 @@ void s21::matrix::Network::InitializeWeights_() {
   m_weigths_.reserve(m_layers_.size() - 1);
   for (size_t i = 1; i < m_layers_.size(); ++i) {
     m_weigths_.push_back(new S21Matrix(  // adding weights
-      m_layers_.at(i - 1)->GetRows() + 1, m_layers_.at(i)->GetRows())
-    );  // GetRows + 1 cuz we need one more weight (bias)
-    // initializing it with random weights
+      m_layers_.at(i - 1)->GetCols(), m_layers_.at(i)->GetCols())
+    );
     m_weigths_.at(i - 1)->FillMatrix(true);
   }
 }
 
-std::vector<double> s21::matrix::Network::ForwardProp(const std::vector<double>& input_data) {
-  
+void s21::matrix::Network::InitializeBiases_() {
+  for (size_t i = 0; i < m_layers_.size() - 1; ++i)
+    m_biases_.push_back(0.1 /*S21Matrix::GenerateRandomNumber(-1.0, 1.0)*/);
+  m_biases_.shrink_to_fit();
+}
+
+double s21::matrix::Network::TransferDerivative(double value) {
+  return value * (1.0 - value);
+}
+
+S21Matrix s21::matrix::Network::ForwardProp(const std::vector<double>& input_data) {
+  m_layers_.front()->SetValues(input_data);
+  for (size_t i = 0; i < m_layers_.size() - 1; ++i) {
+    *m_layers_.at(i + 1) = m_layers_.at(i)->MulMatrixWithBias(
+                          *m_weigths_.at(i),
+                          m_biases_.at(i));
+    m_layers_.at(i + 1)->TransferMatrix();
+  }
+  return *(m_layers_.back());
 }
