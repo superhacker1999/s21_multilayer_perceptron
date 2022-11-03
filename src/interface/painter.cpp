@@ -2,11 +2,12 @@
 #include "ui_painter.h"
 
 s21::painter::painter(QWidget *parent)
-    : QWidget(parent)
-    , ui(new s21::Ui::painter)
+    : QWidget(parent),
+      ui(new s21::Ui::painter),
+      controller_("../../../../../dataset/interface-letters.txt", "../../../../weights/weights26640x100x005.txt")
+
 {
     net_ = new s21::Network({50, 30}, 784, 26, 0.05);
-    net_->UploadWeightsToNet(net_->LoadWeights("/Users/ritapryanik/Desktop/mlp/src/weights/weights26640x100x005.txt"));  // загрузить выгруженные веса
     ui->setupUi(this);
     fillAlphabet_();
 
@@ -102,16 +103,15 @@ void s21::painter::onPredictButtonClicked_() {
     }
   }
 
-
 //  int i = 0;
 //  for (auto it = input_data.begin(); it != input_data.end(); ++it) {
 //      if (i % 28 == 0) std::cout << "\n";
 //      i++;
 //      printf("%5.2lf ", *it);
 //  }
-  normalizeData_(input_data, max);
+//  normalizeData_(input_data, max);
   writeLetterToFile(input_data, ui->answer->text().toStdString());
-  auto letter = alphabet_.find(net_->Predict(input_data));
+  auto letter = alphabet_.find(controller_.getPrediction());
   if (letter != alphabet_.end()) {
     ui->label->setText(QString((*letter).second));
   } else {
@@ -123,12 +123,6 @@ void s21::painter::onPredictButtonClicked_() {
 //    qDebug() << *it << " ";
 //  }
 
-}
-
-void s21::painter::normalizeData_(std::vector <double> &input_data, double max) {
-    for (auto it = input_data.begin(); it != input_data.end(); ++it) {
-        *it = *it / max;
-    }
 }
 
 

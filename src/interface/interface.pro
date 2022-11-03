@@ -12,12 +12,15 @@ SOURCES += \
     ../code/layer.cc \
     ../code/network.cc \
     ../code/neuron.cc \
+    ../controller/controller.cc \
+    ../helpers/datahandler.cc \
     ../helpers/parser.cc \
     main.cpp \
     painter.cpp \
     scene.cpp
 
 HEADERS += \
+    ../controller/controller.h \
     ../helpers/datahandler.h \
     ../helpers/parser.h \
     ../includes/layer.h \

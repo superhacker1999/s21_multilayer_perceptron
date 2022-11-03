@@ -11,8 +11,10 @@ s21::Parser::Dataset Parser::Parsing(const std::string &file_name) {
     std::ifstream file(file_name);
     error_ = false;
     if (file.is_open()) {
-        while (getline(file, line)) {
+        while (1) {
+            getline(file, line);
             data_set_.push_back(StringParsing_(line));
+            if (file.eof()) break;
         }
         data_set_.shrink_to_fit();
         file.close();
@@ -27,8 +29,8 @@ std::vector<int> Parser::StringParsing_(std::string line) {
     result_vector.reserve(string_size_);
     std::string tmp_sub_string;
     for(auto it = line.begin(); it <= line.end(); ++it) {
-        if(isdigit(*it)) {tmp_sub_string += *it;}
-        if((*it == ',' || it == line.end()) && !tmp_sub_string.empty()) {
+        if (isdigit(*it)) {tmp_sub_string += *it;}
+        if ((*it == ',' || it == line.end()) && !tmp_sub_string.empty()) {
             result_vector.push_back(std::stoi(tmp_sub_string));
             tmp_sub_string.clear();
         }

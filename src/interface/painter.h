@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "../includes/network.h"
+#include "../controller/controller.h"
 #include <QGraphicsBlurEffect>
 #include "scene.h"
 #include <QGraphicsPixmapItem>
@@ -30,6 +31,7 @@ public:
 
 private:
     Ui::painter *ui;
+    Controller controller_;
     Scene *scene;
     QPixmap letter_;
     QLabel *picture_place_;
