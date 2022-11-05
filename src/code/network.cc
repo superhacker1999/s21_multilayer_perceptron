@@ -235,6 +235,7 @@ std::vector<double> s21::Network::LoadWeights(const std::string& weight_path) {
       }
     }
     // assert(loaded_weights.size() == 41586);
+    weights_file.close();
   } else {
     throw std::length_error("There is no file with weights\nPlease teach 'em");
   }

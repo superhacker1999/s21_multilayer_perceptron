@@ -1,6 +1,8 @@
 CC=gcc
 SRC_LEARN:=code/layer.cc code/network.cc code/neuron.cc code/learn.cc $(PWD)/helpers/parser.cc
-SRC_TEST:=code/layer.cc code/network.cc code/neuron.cc code/test.cc $(PWD)/helpers/parser.cc
+SRC_TEST:=code/test.cc 
+SRC:=code/layer.cc code/network.cc code/neuron.cc $(PWD)/helpers/parser.cc
+SRC_GUI_TEST:=tests/test_from_interface.cc helpers/datahandler.cc
 CFLAGS:=-Wall -Wextra -lstdc++ -std=c++17
 
 learn: clean
@@ -11,10 +13,14 @@ learn: clean
 	rm -rf text.txt
 
 test:
-	$(CC) $(CFLAGS) $(SRC_TEST)
+	$(CC) $(CFLAGS) $(SRC_TEST) $(SRC)
 	./a.out $(filename) > text.txt
 	bash telegram.sh "Tests are done."
 	rm -rf text.txt
+
+gui_test:
+	$(CC) $(CFLAGS) -g $(SRC) $(SRC_GUI_TEST)
+	./a.out /Users/ritapryanik/Desktop/mlp/src/weights/weights26640x100x005.txt
 
 debug: clean
 	$(CC) $(CFLAGS) -g $(SRC)

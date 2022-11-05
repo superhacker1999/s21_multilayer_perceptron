@@ -4,10 +4,9 @@
 s21::painter::painter(QWidget *parent)
     : QWidget(parent),
       ui(new s21::Ui::painter),
-      controller_("../../../../../dataset/interface-letters.txt", "../../../../weights/weights26640x100x005.txt")
+      controller_("../../../../weights/weights26640x100x005.txt")
 
 {
-    net_ = new s21::Network({50, 30}, 784, 26, 0.05);
     ui->setupUi(this);
     fillAlphabet_();
 
@@ -31,6 +30,8 @@ s21::painter::painter(QWidget *parent)
 s21::painter::~painter()
 {
     delete ui;
+    delete scene;
+    delete picture_place_;
 }
 
 void s21::painter::paintLetter_() {
@@ -67,15 +68,22 @@ void s21::painter::clearScene_() {
     ui->label->clear();
 }
 
-void writeLetterToFile(std::vector <double> input_data, std::string answer) {
+void writeLetterToFile(std::vector <int> input_data, std::string answer) {
     std::ofstream test_file;
+    std::ofstream input_file;
     test_file.open("/Users/ritapryanik/Desktop/mlp/dataset/interface-letters.txt", std::ios::app);
+    input_file.open("/Users/ritapryanik/Desktop/mlp/dataset/input_data.txt");
     test_file << answer << ",";
+    input_file << answer << ",";
     for (size_t i = 0; i < input_data.size(); i++)
     {
       test_file << input_data[i] << ",";
+      input_file << input_data[i] << "," << std::flush;
+
     }
     test_file << "\n";
+    test_file.close();
+    input_file.close();
 
 }
 
@@ -90,16 +98,16 @@ void s21::painter::onPredictButtonClicked_() {
   compressImage_();
   QImage result = letter_.toImage();
   QColor pixel_;
-  std::vector<double> input_data;
+  std::vector<int> input_data;
   int red, green, blue;
-  double max = -1.0;
+  int max = -1.0;
   for (int i = 0; i < result.height(); ++i) {
     for (int j = 0; j < result.width(); ++j) {
       pixel_ = result.pixel(i, j);
       pixel_.getRgb(&red, &green, &blue);
-      double colour = ((255 - red) + (255 - green) + (255 - blue)) / 3.0;
+      int colour = ((255 - red) + (255 - green) + (255 - blue)) / 3.0;
       if (colour > max) max = colour;
-      input_data.push_back(double(colour));
+      input_data.push_back(colour);
     }
   }
 
@@ -109,13 +117,12 @@ void s21::painter::onPredictButtonClicked_() {
 //      i++;
 //      printf("%5.2lf ", *it);
 //  }
-//  normalizeData_(input_data, max);
   writeLetterToFile(input_data, ui->answer->text().toStdString());
-  auto letter = alphabet_.find(controller_.getPrediction());
+  auto letter = alphabet_.find(controller_.getPredictionFrom(input_data));
   if (letter != alphabet_.end()) {
     ui->label->setText(QString((*letter).second));
   } else {
-      ui->label->setText("Я ничего не понимаю(((");
+    ui->label->setText("Я ничего не понимаю(((");
   }
 
 //  auto res_vec = net_->Predict_test(input_data);

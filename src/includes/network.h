@@ -15,7 +15,7 @@ class Network {
   private:
     std::vector<Layer*> m_layers_;  // кол-во внутренних слоев
     double m_learning_rate_;  // коэффициент с которым происходит обучение и изменение весов
-    double testPerfomance; // ???
+    // double testPerfomance; // ???
 
     public:
       Network(std::vector<int> spec, size_t, size_t, double);

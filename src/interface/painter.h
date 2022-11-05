@@ -35,7 +35,6 @@ private:
     Scene *scene;
     QPixmap letter_;
     QLabel *picture_place_;
-    s21::Network *net_;
     std::map<int, char> alphabet_;
     void fillAlphabet_();
     QColor inverseColors_(QColor pixel);
