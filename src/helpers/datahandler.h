@@ -9,19 +9,19 @@ namespace s21 {
 class DataHandler {
 public:
   using parsed_data = std::vector<std::vector<int>>;
-  using train_dataset = std::vector<double>;
-  using train_answer = std::vector<double>;
+  using dataset = std::vector<double>;
+  using answer = std::vector<double>;
 
   DataHandler(const std::string &file_name);
-  std::pair<train_dataset, train_answer> GetThisTrainSet(int pos);
-  void parseData();
+  DataHandler(const std::vector<int> &input_data);
+  std::pair<dataset, answer> GetThisTrainSet(int pos);
+  dataset normalizeInput();
 
 private:
-  std::string file_path_;
   parsed_data data_;
   Parser parser_;
 
-  std::pair<train_dataset, train_answer>
+  std::pair<dataset, answer>
   NormalizeData_(const std::vector<int> &parsed_data);
 }; // DataHandler
 } // namespace s21

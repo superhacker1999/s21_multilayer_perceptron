@@ -1,9 +1,17 @@
 #include "datahandler.h"
 
-s21::DataHandler::DataHandler(const std::string &file_name) : file_path_(file_name) {}
+s21::DataHandler::DataHandler(const std::string &file_name)
+    :  data_(parser_.Parsing(file_name)) {}
 
-void s21::DataHandler::parseData() {
-    data_ = parser_.Parsing(file_path_);
+s21::DataHandler::DataHandler(const std::vector<int> &input_data) 
+    : data_(std::vector<std::vector<int>>({input_data})) {}
+
+std::vector<double> s21::DataHandler::normalizeInput() {
+  std::vector<double> normalized_data;
+  for (auto number : data_[0]) {
+    normalized_data.push_back((double)number * kKoeff);
+  }
+  return normalized_data;
 }
 
 std::pair<std::vector<double>, std::vector<double>>
