@@ -7,14 +7,13 @@
 namespace s21 {
 class Controller {
   private:
-    s21::DataHandler data_handler_;
     std::string weights_path_;
+    s21::Network net_;
   
   public:
-    Controller();
-    Controller(std::string input_path, std::string weights_path);
+    Controller(std::string weights_path);
     ~Controller() {};
-    int getPrediction();
+    int getPredictionFrom(std::vector<int> &input_data);
 };
 }
 
